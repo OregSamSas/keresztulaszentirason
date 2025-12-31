@@ -23,10 +23,10 @@ var BIBLE = [
 
 const POINTLOGIC = {
     // Logic of awarding points based on number of revealed words and guesses
-    base: 10, // Base points for a correct guess
+    base: 12, // Base points for a correct guess
     perUnrevealedWord: 1, // Points per unrevealed word
     perRevealedWord: 0, // Points deducted per revealed word
-    testamentBonus: 3, // Bonus points for the player who guessed the correct testament (OT/NT) (first if multiplayer)
+    testamentBonus: 2, // Bonus points for the player who guessed the correct testament (OT/NT) (first if multiplayer)
     bookBonus: 5, // Bonus points for the player who guessed the correct book (first if multiplayer)
     chapterBonus: 9, // Bonus points for the player who guessed the correct chapter (first if multiplayer)
 }
@@ -43,7 +43,7 @@ function loadPointLogicFromURL() {
     }
 }
 
-var DEFAULTTRANS = "RUF";
+var DEFAULTTRANS = new URLSearchParams(window.location.search).get('version') || "RUF";
 var VERSETEXT = "";
 var VERSELOC = [0, 1, 1]; // [booknum, chapter, verse]
 const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players')) || 1;
@@ -66,6 +66,39 @@ var GAMESTATE = {
 var GUESSES = [];
 const DEBUGMODE = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('debug'))) ? true : false;
 if (DEBUGMODE) console.log("DEBUG MODE ON");
+
+function applyDarkModeIfPreferred(force=false) {
+    // Detect if user prefers dark color scheme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches || force === true) {
+        // Find the stylesheet for vetelkedooldal.css
+        let darkVars = {
+            '--primary-color': '#66a0dbff',
+            '--hover-primary-color': '#4f7cb4ff',
+            '--secondary-color': '#197fc3ff',
+            '--hover-secondary-color': '#0f6eaeff',
+            '--success-color': '#35b76cff',
+            '--hover-success-color': '#229954',
+            '--background-color': '#181a1b',
+            '--input-color': '#23272a',
+            '--section-color': '#23272a',
+            '--foreground-color': '#222932ff',
+            '--text-color': '#f8f8f8',
+            '--muted-text-color': '#b0b0b0',
+            '--border-color': '#333a41',
+            '--shadow': 'rgba(0,0,0,0.5)'
+        };
+        // Apply to :root
+        let root = document.documentElement;
+        for (let key in darkVars) {
+            root.style.setProperty(key, darkVars[key]);
+        }
+    }
+}
+let DarkMode = new URLSearchParams(window.location.search).get('darkmode')
+if (['true', '1', 'yes'].includes(DarkMode)) DarkMode =  ['true', '1', 'yes'].includes(DarkMode)
+if (['false', '0', 'no'].includes(DarkMode)) DarkMode =  !['false', '0', 'no'].includes(DarkMode)
+console.log("Dark mode preference:", DarkMode);
+if (DarkMode !== false) applyDarkModeIfPreferred(DarkMode);
 
 function reconstruct_bible_dict() {    
     req = new XMLHttpRequest();

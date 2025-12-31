@@ -1,10 +1,45 @@
 
 # Keresztül a Szentíráson
 
-A Bible Verse guessing quizgame web applications published under https://oregsamsas.github.io/keresztulaszentirason
+A Hungarian Bible Verse guessing quizgame web applications published under https://oregsamsas.github.io/keresztulaszentirason.
 
-# ✝️
+The Bible books in the book dropdown are from the catholic scriptures, although when a protestant translation is used (as by default for example), verses won't be generated from there.
 
-# 🪑
+# | ✝️_kereszt________|
 
-# 📖
+# | 🪑_ül______________|
+
+# | 📖_a_Szentíráson_|
+
+## Multiplayer mode
+
+The game offers a multiplayer mode, in which multiple players can compete with each other who guesses the location of the verse at first (see #Customisation to learn how to access it)
+
+## Feedback on guesses and way of scoring points
+
+You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right or to the left. The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can see at the bottom of the page) will be updated at this point.
+
+## Customisation
+
+Can be customised with URL parameters.
+
+* `version` [*str*]: the bible translation used for target verse text and location (if not specified, default version is RÚF 2014)
+* `players` [*int*]: to access multiplayer mode, insert this parameter into the URL, and specify the number of players
+* `autoreveal` [*bool*]: if set true, on game start, the first and last word of the verse will be automatically revealed and a new one after each guess (or player's round if multiplayer)
+* `debug` [*bool*]: parameter to set debug mode on (debug mode will log processes and use the same bible verse (Tobit 1:1) from [plreq.json](plreq.json), in order to spare yourself from fetching verses a hundred times when tested over and over again)
+* `darkmode` [*bool*]: dark mode preference can be set by URL parameters to override the browser's default (if value is not 0, true, yes or 1, false, no then the parameter will have no effect, default preference will be selected)
+* `pointcalc` [*array*]: list defining the point scoring logic.
+  * 1st: base points earned when guessed correctly
+  * 2nd: points earned after each unrevealed words
+  * 3rd: points earned or lost (if negative!) after each revealed words
+  * 4th: bonus points for the player who guessed the correct testament (OT/NT) for the first time (in one player mode, you automatically get it on guessing correctly, it has significance in multiplayer mode)
+  * 5th: bonus points for book (the same appliesas for 4th item)
+  * 6th: bonus points for chapter (here too)
+* The **default point** calculating **logic** is equvivalent to the following list: `12,1,0,2,5,9`
+
+## Credits
+
+* Bible verses are fetched from szentiras.eu, using ther [API](https://szentiras.eu/api)
+* Huge thanks to the developers of szentiras.eu, i.e. the group Szent József Hackathon and furthermore, the Szent Jeremos Bibliatársulat, the maintaner of the website szentiras.hu
+* USX codes for the books of the Bible are collected from [ubsicap's repo](https://github.com/ubsicap/usx/blob/master/schema/usx_2.6.rnc)
+* Chapter and verse counts are collected from the Biblemap object found at [ujevangelizacio.hu](https://halld.ujevangelizacio.hu/biblemap.html)
