@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliai vetélkedő</title>
+    <!-- Icon from emojipedia.org "open book" emoji LG design -->
+    <link rel="icon" type="image/png" href="https://em-content.zobj.net/source/lg/307/open-book_1f4d6.png">
+    <link rel="stylesheet" href="vetelkedooldal.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Bibliai vetélkedő</h1>
+                <p>&bdquo;Keresztül a szentíráson&rdquo;</p>
+            </div>
+            <div id="logo">✝️<br>🪑<br>📖</div>
+        </div>
+
+        <div class="verse-display">
+            <p id="verseText">Vers betöltése...</p>
+            <div id="revealedWordsCount">0 / 0</div>
+        </div>
+
+        <div id="currentPlayer" style="display: none">
+            <h2>Játékos 1</h2>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <div class="form-control">
+                    <label for="bookInput">Könyv</label>
+                    <input type="text" id="bookInput" placeholder="pl. Jn">
+                </div>
+                <div class="form-control">
+                    <label for="chapterInput">Fejezet</label>
+                    <input type="number" id="chapterInput" min="1" placeholder="pl. 3">
+                </div>
+                <div class="form-control">
+                    <label for="verseInput">Vers</label>
+                    <input type="number" id="verseInput" min="1" placeholder="pl. 16">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="guessButton" class="btn-primary" onclick="checkGuess()">Tippelés</button>
+                <button id="revealButton" class="btn-secondary" onclick="revealWord(this)">Új szó felfedése</button>
+                <button id="nextVerseButton" class="btn-success" onclick="nextVerse()">Következő vers</button>
+            </div>
+        </div>
+
+        <div class="guess-area">
+            <h3>Eddigi tippek</h3>
+            <div id="guessesList" class="guesses-list">
+                <span class="idle">Nincsenek tippek még.<abbr title="A tippeid eredményei itt fognak megjelenni.">🤷</abbr></span>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3>Statisztika</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Lejátszott körök</div>
+                    <div class="stat-value" id="gamesCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Megnyert körök</div>
+                    <div class="stat-value" id="roundsCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Összes pont</div>
+                    <div class="stat-value" id="pointsCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Összes tipp</div>
+                    <div class="stat-value" id="guessesCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Legkevesebb tippből kitalált</div>
+                    <div class="stat-value" id="minguessCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Legkevesebb felfedett szóból kitalált</div>
+                    <div class="stat-value" id="minrevealedCount">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="bibliavetelkedo.js"></script>
+</body>
+</html>

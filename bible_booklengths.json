@@ -1,0 +1,570 @@
+[
+  {
+    "sortName": "Ter",
+    "name": "Teremtés könyve (Mózes első könyve)",
+    "abbrevs": ["1Mózes", "Ter", "1Móz"], 
+    "chapters": [31, 25, 24, 26, 32, 22, 24, 22, 29, 32, 32, 20, 18, 24, 20, 16, 27, 33, 38, 18, 34, 24, 20, 67, 34, 35, 46, 22, 35, 43, 54, 33, 20, 31, 29, 43, 36, 30, 23, 23, 57, 38, 34, 34, 28, 34, 31, 22, 33, 26], 
+    "code": "GEN"
+  },
+  {
+    "sortName": "Kiv",
+    "name": "Kivonulás könyve (Mózes második könyve)",
+    "abbrevs": ["Kiv", "2Mózes", "2Móz"], 
+    "chapters": [22, 25, 22, 31, 23, 30, 29, 28, 35, 29, 10, 51, 22, 31, 27, 36, 16, 27, 25, 26, 37, 30, 33, 18, 40, 37, 21, 43, 46, 38, 18, 35, 23, 35, 35, 38, 29, 31, 43, 38], 
+    "code": "EXO"
+  },
+  {
+    "sortName": "Lev",
+    "name": "Leviták könyve (Mózes harmadik könyve)",
+    "abbrevs": ["3Móz", "3Mózes", "Lev"], 
+    "chapters": [17, 16, 17, 35, 26, 23, 38, 36, 24, 20, 47, 8, 59, 57, 33, 34, 16, 30, 37, 27, 24, 33, 44, 23, 55, 46, 34], 
+    "code": "LEV"
+  },
+  {
+    "sortName": "Szám",
+    "name": "Számok könyve (Mózes negyedik könyve)",
+    "abbrevs": ["4Móz", "4Mózes", "Szám"], 
+    "chapters": [54, 34, 51, 49, 31, 27, 89, 26, 23, 36, 35, 16, 33, 45, 41, 35, 28, 32, 22, 29, 35, 41, 30, 25, 19, 65, 23, 31, 39, 17, 54, 42, 56, 29, 34, 13], 
+    "code": "NUM"
+  },
+  {
+    "sortName": "MTörv",
+    "name": "Második Törvénykönyv (Mózes ötödik könyve)",
+    "abbrevs": ["MTörv", "5Móz", "5Mózes"], 
+    "chapters": [46, 37, 29, 49, 33, 25, 26, 20, 29, 22, 32, 31, 19, 29, 23, 22, 20, 22, 21, 20, 23, 29, 26, 22, 19, 19, 26, 69, 28, 20, 30, 52, 29, 12], 
+    "code": "DEU"
+  },
+  {
+    "sortName": "Józs",
+    "name": "Józsue könyve",
+    "abbrevs": ["Józsué", "Józs"], 
+    "chapters": [18, 24, 17, 24, 15, 27, 26, 35, 27, 43, 23, 24, 33, 15, 63, 10, 18, 28, 51, 9, 45, 34, 16, 33], 
+    "code": "JOS"
+  },
+  {
+    "abbrevs": ["Bír", "Bírák"], 
+    "sortName": "Bír",
+    "name": "Bírák könyve",
+    "chapters": [36, 23, 31, 24, 31, 40, 25, 35, 57, 18, 40, 15, 25, 20, 20, 31, 13, 31, 30, 48, 25], 
+    "code": "JDG"
+  },
+  {
+    "abbrevs": ["Rut", "Ruth", "Rút"], 
+    "sortName": "Rut",
+    "name": "Rut könyve",
+    "chapters": [22, 23, 18, 22], 
+    "code": "RUT"
+  },
+  {
+    "abbrevs": ["1Sám", "1Sámuel"], 
+    "sortName": "1Sám",
+    "name": "Sámuel I. könyve",
+    "bname": "1 Samuel",
+    "chapters": [28, 36, 21, 22, 12, 21, 17, 22, 27, 27, 15, 25, 23, 52, 35, 23, 58, 30, 24, 42, 16, 23, 28, 23, 44, 25, 12, 25, 11, 31, 13], 
+    "code": "1SA"
+  },
+  {
+    "abbrevs": ["2Sám", "2Sámuel"], 
+    "sortName": "2Sám",
+    "name": "Sámuel II. könyve",
+    "bname": "2 Samuel",
+    "chapters": [27, 32, 39, 12, 25, 23, 29, 18, 13, 19, 27, 31, 39, 33, 37, 23, 29, 32, 44, 26, 22, 51, 39, 25], 
+    "code": "2SA"
+  },
+  {
+    "abbrevs": ["1Királyok", "1Kir"], 
+    "sortName": "1Kir",
+    "name": "Királyok I. könyve",
+    "bname": "1 Rois",
+    "chapters": [53, 46, 28, 20, 32, 38, 51, 66, 28, 29, 43, 33, 34, 31, 32, 34, 24, 46, 21, 43, 29, 54], 
+    "code": "1KI"
+  },
+  {
+    "abbrevs": ["2Királyok", "2Kir"], 
+    "sortName": "2Kir",
+    "name": "Királyok II. könyve",
+    "bname": "2 Rois",
+    "chapters": [18, 25, 27, 44, 27, 33, 20, 29, 37, 36, 20, 22, 25, 29, 38, 20, 41, 37, 37, 21, 26, 20, 37, 20, 30], 
+    "code": "2KI"
+  },
+  {
+    "abbrevs": ["1Krónikák", "1Krón"], 
+    "sortName": "1Krón",
+    "name": "Krónikák I. könyve",
+    "bname": "1 Chroniques",
+    "chapters": [54, 55, 24, 43, 41, 66, 40, 40, 44, 14, 47, 41, 14, 17, 29, 43, 27, 17, 19, 8, 30, 19, 32, 31, 31, 32, 34, 21, 30], 
+    "code": "1CH"
+  },
+  {
+    "abbrevs": ["2Krónikák", "2Krón"], 
+    "sortName": "2Krón",
+    "name": "Krónikák II. könyve",
+    "bname": "2 Chroniques",
+    "chapters": [18, 17, 17, 22, 14, 42, 22, 18, 31, 19, 23, 16, 23, 14, 19, 14, 19, 34, 11, 37, 20, 12, 21, 27, 28, 23, 9, 27, 36, 27, 21, 33, 25, 33, 27, 23], 
+    "code": "2CH"
+  },
+  {
+    "abbrevs": ["Ezd", "Ezsdrás", "Ezsd"], 
+    "sortName": "Ezd",
+    "name": "Ezdrás könyve",
+    "chapters": [11, 70, 13, 24, 17, 22, 28, 36, 15, 44], 
+    "code": "EZR"
+  },
+  {
+    "abbrevs": ["Neh", "Nehemiás"], 
+    "sortName": "Neh",
+    "name": "Nehemiás könyve",
+    "chapters": [11, 20, 38, 17, 19, 19, 72, 18, 37, 40, 36, 47, 31], 
+    "code": "NEH"
+  },
+  {
+    "abbrevs": ["Tób", "Tóbiás"], 
+    "sortName": "Tób",
+    "name": "Tóbiás könyve",
+    "chapters": [22, 14, 17, 21, 22, 18, 17, 21, 6, 13, 18, 21, 17, 15], 
+    "code": "TOB"
+  },
+  {
+    "abbrevs": ["Judit", "Jud"], 
+    "sortName": "Judit",
+    "name": "Judit könyve",
+    "chapters": [16, 28, 10, 15, 24, 21, 32, 36, 14, 23, 23, 20, 20, 19, 14, 25], 
+    "code": "JDT"
+  },
+  {
+    "abbrevs": ["Eszter", "Eszt", "Esz"], 
+    "sortName": "Esz",
+    "name": "Eszter könyve",
+    "chapters": [32, 23, 31, 51, 29, 14, 10, 43, 33, 13], 
+    "code": "EST"
+  },
+  {
+    "abbrevs": ["1Mak", "1Makkabeusok"], 
+    "sortName": "1Mak",
+    "name": "Makkabeusok I. könyve",
+    "bname": "1 Maccabées",
+    "chapters": [64, 70, 60, 61, 68, 63, 50, 32, 73, 89, 74, 53, 53, 49, 41, 24], 
+    "code": "1MA"
+  },
+  {
+    "abbrevs": ["2Makkabeusok", "2Mak"], 
+    "sortName": "2Mak",
+    "name": "Makkabeusok II. könyve",
+    "bname": "2 Maccabées",
+    "chapters": [36, 32, 40, 50, 27, 31, 42, 36, 29, 38, 38, 45, 26, 46, 39], 
+    "code": "2MA"
+  },
+  {
+    "abbrevs": ["Jób", "Job"], 
+    "sortName": "Jób",
+    "name": "Jób könyve",
+    "chapters": [22, 13, 26, 21, 27, 30, 21, 22, 35, 22, 20, 25, 28, 22, 35, 22, 16, 21, 29, 29, 34, 30, 17, 25, 6, 14, 23, 28, 25, 31, 40, 22, 33, 37, 16, 33, 24, 41, 30, 32, 26, 17], 
+    "code": "JOB"
+  },
+  {
+    "abbrevs": ["Zsolt", "Zsoltárok"], 
+    "sortName": "Zsolt",
+    "name": "Zsoltárok könyve",
+    "chapters": [6, 12, 9, 9, 13, 11, 18, 10, 21, 18, 7, 9, 6, 7, 5, 11, 15, 51, 15, 10, 14, 32, 6, 10, 22, 12, 14, 9, 11, 13, 25, 11, 22, 23, 28, 13, 40, 23, 14, 18, 14, 12, 5, 27, 18, 12, 10, 15, 21, 23, 18, 11, 7, 9, 24, 14, 12, 12, 18, 14, 9, 13, 12, 11, 14, 20, 8, 36, 37, 6, 24, 20, 28, 23, 11, 13, 21, 72, 13, 20, 17, 8, 19, 13, 14, 17, 7, 19, 53, 17, 16, 16, 5, 23, 11, 13, 12, 9, 9, 5, 8, 29, 22, 35, 45, 48, 43, 14, 31, 7, 10, 10, 9, 8, 18, 19, 2, 29, 176, 7, 8, 9, 4, 8, 5, 6, 5, 6, 8, 8, 3, 18, 3, 3, 21, 26, 9, 8, 24, 14, 10, 8, 12, 15, 21, 10, 20, 14, 9, 6], 
+    "code": "PSA"
+  },
+  {
+    "abbrevs": ["Pél", "Példabeszédek", "Péld"], 
+    "sortName": "Péld",
+    "name": "Példabeszédek könyve",
+    "chapters": [33, 22, 35, 27, 23, 35, 27, 36, 18, 32, 31, 28, 25, 35, 33, 33, 28, 24, 29, 30, 31, 29, 35, 34, 28, 28, 27, 28, 27, 33, 31], 
+    "code": "PRO"
+  },
+  {
+    "abbrevs": ["Qo", "Prédikátor", "Préd"], 
+    "sortName": "Préd",
+    "name": "Prédikátor könyve",
+    "bname": "Ecclésiaste",
+    "chapters": [18, 26, 22, 17, 19, 12, 29, 17, 18, 20, 10, 14], 
+    "code": "ECC"
+  },
+  {
+    "abbrevs": ["Ct", "Én", "Énekek"], 
+    "sortName": "Én",
+    "name": "Énekek éneke",
+    "bname": "Cantique",
+    "chapters": [17, 17, 11, 16, 16, 12, 14, 14], 
+    "code": "SNG"
+  },
+  {
+    "abbrevs": ["Bölcs", "Sg", "Böl", "Bölcsesség"], 
+    "sortName": "Bölcs",
+    "name": "Bölcsesség könyve",
+    "bname": "Sagesse",
+    "chapters": [16, 24, 19, 20, 23, 25, 30, 21, 19, 21, 26, 27, 19, 31, 19, 29, 21, 25, 22], 
+    "code": "WIS"
+  },
+  {
+    "abbrevs": ["Sir", "Si", "Sirák"], 
+    "sortName": "Sir",
+    "name": "Sirák fia könyve",
+    "bname": "Ecclésiastique",
+    "chapters": [30, 18, 31, 31, 15, 37, 36, 19, 18, 31, 34, 18, 26, 27, 22, 30, 32, 33, 30, 31, 28, 27, 27, 34, 26, 29, 30, 26, 28, 25, 31, 24, 33, 26, 24, 27, 31, 34, 35, 30, 27, 26, 33, 23, 26, 20, 25, 25, 16, 29, 30], 
+    "code": "SIR"
+  },
+  {
+    "abbrevs": ["Izajás", "Iz", "Ézsaiás", "Ézs"], 
+    "sortName": "Iz",
+    "name": "Izajás könyve (Ézsaiás)",
+    "bname": "Isaïe",
+    "chapters": [31, 22, 26, 6, 30, 13, 25, 23, 20, 34, 16, 6, 22, 32, 9, 14, 14, 7, 25, 6, 17, 25, 18, 23, 12, 21, 13, 29, 24, 33, 9, 20, 24, 17, 10, 22, 38, 22, 8, 31, 29, 25, 28, 28, 25, 13, 15, 22, 26, 11, 23, 15, 12, 17, 13, 12, 21, 14, 21, 22, 11, 12, 19, 11, 25, 24], 
+    "code": "ISA"
+  },
+  {
+    "abbrevs": ["Jer", "Jr", "Jeremiás"], 
+    "sortName": "Jer",
+    "name": "Jeremiás könyve",
+    "bname": "Jérémie",
+    "chapters": [19, 37, 25, 31, 31, 30, 34, 23, 25, 25, 23, 17, 27, 22, 21, 21, 27, 23, 15, 18, 14, 30, 40, 10, 38, 24, 22, 17, 32, 24, 40, 44, 26, 22, 19, 32, 21, 28, 18, 16, 18, 22, 13, 30, 5, 28, 7, 47, 39, 46, 64, 34], 
+    "code": "JER"
+  },
+  {
+    "abbrevs": ["JSir", "JrSir", "Siral", "Siralmak", "Siralm", "JerSir", "Lm"], 
+    "sortName": "Siral",
+    "name": "Siralmak könyve",
+    "bname": "Lamentations",
+    "chapters": [22, 22, 66, 22, 22], 
+    "code": "LAM"
+  },
+  {
+    "abbrevs": ["Bar", "Ba", "Báruk", "Bár"], 
+    "sortName": "Bár",
+    "name": "Báruk könyve",
+    "bname": "Baruch",
+    "chapters": [22, 35, 38, 37, 9, 73], 
+    "code": "BAR"
+  },
+  {
+    "abbrevs": ["Ezékiel", "Ez", "Ezel"], 
+    "sortName": "Ez",
+    "name": "Ezekiel könyve",
+    "bname": "Ezéchiel",
+    "chapters": [28, 10, 27, 17, 17, 14, 27, 18, 11, 22, 25, 28, 23, 23, 8, 63, 24, 32, 14, 44, 37, 31, 49, 27, 17, 21, 36, 26, 21, 26, 18, 32, 33, 31, 15, 38, 28, 23, 29, 49, 26, 20, 27, 31, 25, 24, 23, 35], 
+    "code": "EZK"
+  },
+  {
+    "abbrevs": ["Dán", "Dn", "Dan", "Dániel"], 
+    "sortName": "Dán",
+    "name": "Dániel könyve",
+    "bname": "Daniel",
+    "chapters": [21, 49, 100, 34, 30, 29, 28, 27, 27, 21, 45, 13, 65, 42], 
+    "code": "DAN"
+  },
+  {
+    "abbrevs": ["Hóseás", "Oz", "Hos", "Ozeás", "Os"], 
+    "sortName": "Oz",
+    "name": "Ozeás könyve (Hóseás)",
+    "bname": "Osée",
+    "chapters": [9, 25, 5, 19, 15, 11, 16, 14, 17, 15, 11, 15, 15, 10], 
+    "code": "HOS"
+  },
+  {
+    "abbrevs": ["Jo", "Joél", "Joel", "Jó", "Jl", "Jóel"], 
+    "sortName": "Jo",
+    "name": "Joel könyve",
+    "bname": "Joël",
+    "chapters": [20, 27, 5, 21], 
+    "code": "JOL"
+  },
+  {
+    "abbrevs": ["Ámosz", "Amos", "Amós", "Ám", "Am"], 
+    "sortName": "Ám",
+    "name": "Ámosz könyve",
+    "bname": "Amos",
+    "chapters": [15, 16, 15, 13, 27, 14, 17, 14, 15], 
+    "code": "AMO"
+  },
+  {
+    "abbrevs": ["Abdiás", "Ab", "Abd"], 
+    "sortName": "Abd",
+    "name": "Abdiás könyve",
+    "bname": "Abdias",
+    "chapters": [21], 
+    "code": "OBA"
+  },
+  {
+    "abbrevs": ["Jón", "Jon", "Jónás"], 
+    "sortName": "Jón",
+    "name": "Jónás könyve",
+    "bname": "Jonas",
+    "chapters": [16, 11, 10, 11], 
+    "code": "JON"
+  },
+  {
+    "abbrevs": ["Mi", "Mik", "Mikeás"], 
+    "sortName": "Mik",
+    "name": "Mikeás könyve",
+    "bname": "Michée",
+    "chapters": [16, 13, 12, 14, 14, 16, 20], 
+    "code": "MIC"
+  },
+  {
+    "abbrevs": ["Náh", "Nám", "Na", "Nahum", "Náhum"], 
+    "sortName": "Náh",
+    "name": "Náhum könyve",
+    "bname": "Nahum",
+    "chapters": [14, 14, 19], 
+    "code": "NAM"
+  },
+  {
+    "abbrevs": ["Ha", "Hab", "Habakuk"], 
+    "sortName": "Hab",
+    "name": "Habakuk könyve",
+    "bname": "Habaquq",
+    "chapters": [17, 20, 19], 
+    "code": "HAB"
+  },
+  {
+    "abbrevs": ["Zofóniás", "So", "Szofoniás", "Szof", "Zof"], 
+    "sortName": "Szof",
+    "name": "Szofoniás könyve (Zofóniás)",
+    "bname": "Sophonie",
+    "chapters": [18, 15, 20], 
+    "code": "ZEP"
+  },
+  {
+    "abbrevs": ["Aggéus", "Agg", "Ag", "Hag", "Haggeus"], 
+    "sortName": "Ag",
+    "name": "Aggeus könyve (Haggeus)",
+    "bname": "Aggée",
+    "chapters": [15, 23], 
+    "code": "HAG"
+  },
+  {
+    "abbrevs": ["Za", "Zakariás", "Zak"], 
+    "sortName": "Zak",
+    "name": "Zakariás könyve",
+    "bname": "Zacharie",
+    "chapters": [17, 17, 10, 14, 11, 15, 14, 23, 17, 12, 17, 14, 9, 21], 
+    "code": "ZEC"
+  },
+  {
+    "abbrevs": ["Malakiás", "Mal"], 
+    "sortName": "Mal",
+    "name": "Malakiás könyve",
+    "bname": "Malachie",
+    "chapters": [14, 17, 24], 
+    "code": "MAL"
+  },
+  {
+    "abbrevs": ["Máté", "Mát", "Mt"], 
+    "sortName": "Mt",
+    "name": "Máté evangéliuma",
+    "bname": "Matthieu",
+    "chapters": [25, 23, 17, 25, 48, 34, 29, 34, 38, 42, 30, 50, 58, 36, 39, 28, 26, 34, 30, 34, 46, 46, 38, 51, 46, 75, 66, 20], 
+    "code": "MAT"
+  },
+  {
+    "abbrevs": ["Márk", "Mk", "Mc", "Már"], 
+    "sortName": "Mk",
+    "name": "Márk evangéliuma",
+    "bname": "Marc",
+    "chapters": [45, 28, 35, 41, 43, 56, 37, 38, 48, 52, 32, 44, 37, 72, 46, 20], 
+    "code": "MRK"
+  },
+  {
+    "abbrevs": ["Lukács", "Lk", "Luk", "Lc"], 
+    "sortName": "Lk",
+    "name": "Lukács evangéliuma",
+    "bname": "Luc",
+    "chapters": [80, 52, 38, 44, 39, 49, 50, 56, 62, 42, 54, 59, 35, 35, 32, 31, 37, 43, 48, 47, 38, 71, 55, 53], 
+    "code": "LUK"
+  },
+  {
+    "abbrevs": ["Ján", "Jn", "János"], 
+    "sortName": "Jn",
+    "name": "János evangéliuma",
+    "bname": "Jean",
+    "chapters": [51, 25, 36, 54, 47, 71, 53, 59, 41, 42, 57, 50, 38, 31, 27, 33, 26, 40, 42, 31, 25], 
+    "code": "JHN"
+  },
+  {
+    "abbrevs": ["Cselekedetek", "ApCsel", "Ac", "Csel"], 
+    "sortName": "ApCsel",
+    "name": "Apostolok Cselekedetei",
+    "bname": "Actes",
+    "chapters": [26, 47, 26, 37, 42, 15, 60, 39, 43, 48, 30, 25, 52, 28, 41, 40, 34, 28, 40, 38, 40, 30, 35, 26, 27, 32, 44, 30], 
+    "code": "ACT"
+  },
+  {
+    "abbrevs": ["Róma", "Rom", "Rm", "Róm"], 
+    "sortName": "Róm",
+    "name": "Rómaiaknak írt levél",
+    "bname": "Romains",
+    "chapters": [32, 29, 31, 25, 21, 23, 25, 39, 33, 21, 36, 21, 14, 23, 33, 26], 
+    "code": "ROM"
+  },
+  {
+    "abbrevs": ["1Co", "1Kor", "1Korintus"], 
+    "sortName": "1Kor",
+    "name": "Korintusiaknak írt I. levél",
+    "bname": "1 Corinthiens",
+    "chapters": [31, 16, 23, 21, 13, 20, 40, 13, 27, 33, 34, 31, 13, 40, 58, 24], 
+    "code": "1CO"
+  },
+  {
+    "abbrevs": ["2Co", "2Kor", "2Korintus"], 
+    "sortName": "2Kor",
+    "name": "Korintusiaknak írt II. levél",
+    "bname": "2 Corinthiens",
+    "chapters": [24, 17, 18, 18, 21, 18, 16, 24, 15, 18, 33, 21, 13], 
+    "code": "2CO"
+  },
+  {
+    "abbrevs": ["Galata", "Gal", "Galácziabeliek", "Ga"], 
+    "sortName": "Gal",
+    "name": "Galatáknak írt levél",
+    "bname": "Galates",
+    "chapters": [24, 21, 29, 31, 26, 18], 
+    "code": "GAL"
+  },
+  {
+    "abbrevs": ["Efezus", "Efézus", "Ef", "Ep"], 
+    "sortName": "Ef",
+    "name": "Efezusiaknak írt levél",
+    "bname": "Ephésiens",
+    "chapters": [23, 22, 21, 32, 33, 24], 
+    "code": "EPH"
+  },
+  {
+    "abbrevs": ["Filippi", "Ph", "Fil"], 
+    "sortName": "Fil",
+    "name": "Filippieknek írt levél",
+    "bname": "Philippiens",
+    "chapters": [30, 30, 21, 23], 
+    "code": "PHP"
+  },
+  {
+    "abbrevs": ["Kolossze", "Kolossé", "Kol", "Col"], 
+    "sortName": "Kol",
+    "name": "Kolosszeieknek írt levél",
+    "bname": "Colossiens",
+    "chapters": [29, 23, 25, 18], 
+    "code": "COL"
+  },
+  {
+    "abbrevs": ["1Th", "1Tesszalonika", "1Tesz"], 
+    "sortName": "1Tesz",
+    "name": "Tesszalonikaiaknak írt I. levél",
+    "bname": "1 Théssaloniciens",
+    "chapters": [10, 20, 13, 18, 28], 
+    "code": "1TH"
+  },
+  {
+    "abbrevs": ["2Tesz", "2Tesszalonika", "2Th"], 
+    "sortName": "2Tesz",
+    "name": "Tesszalonikaiaknak írt II. levél",
+    "bname": "2 Théssaloniciens",
+    "chapters": [12, 17, 18], 
+    "code": "2TH"
+  },
+  {
+    "abbrevs": ["1Tim", "1Tm", "1Timóteus"], 
+    "sortName": "1Tim",
+    "name": "Timóteusnak írt I. levél",
+    "bname": "1 Thimothées",
+    "chapters": [20, 15, 16, 16, 25, 21], 
+    "code": "1TI"
+  },
+  {
+    "abbrevs": ["2Tim", "2Tm", "2Timóteus"], 
+    "sortName": "2Tim",
+    "name": "Timóteusnak írt II. levél",
+    "bname": "2 Thimothées",
+    "chapters": [18, 26, 17, 22], 
+    "code": "2TI"
+  },
+  {
+    "abbrevs": ["Tt", "Titusz", "Tit"], 
+    "sortName": "Tit",
+    "name": "Titusznak írt levél",
+    "bname": "Tite",
+    "chapters": [16, 15, 15], 
+    "code": "TIT"
+  },
+  {
+    "abbrevs": ["Filem", "Filemon", "Phm"], 
+    "sortName": "Filem",
+    "name": "Filemonnak írt levél",
+    "bname": "Philémon",
+    "chapters": [25], 
+    "code": "PHM"
+  },
+  {
+    "abbrevs": ["He", "Zsidók", "Zsid"], 
+    "sortName": "Zsid",
+    "name": "Zsidóknak írt levél",
+    "bname": "Hébreux",
+    "chapters": [14, 18, 19, 16, 14, 20, 28, 13, 28, 39, 40, 29, 25], 
+    "code": "HEB"
+  },
+  {
+    "abbrevs": ["Jakab", "Jk", "Jak", "Jc"], 
+    "sortName": "Jak",
+    "name": "Szent Jakab levele",
+    "bname": "Jacques",
+    "chapters": [27, 26, 18, 17, 20], 
+    "code": "JAS"
+  },
+  {
+    "abbrevs": ["1P", "1Pt", "1Péter"], 
+    "sortName": "1Pt",
+    "name": "Szent Péter I. levele",
+    "bname": "1 Pierre",
+    "chapters": [25, 25, 22, 19, 14], 
+    "code": "1PE"
+  },
+  {
+    "abbrevs": ["2Péter", "2Pt", "2P"], 
+    "sortName": "2Pt",
+    "name": "Szent Péter II. levele",
+    "bname": "2 Pierre",
+    "chapters": [21, 22, 18], 
+    "code": "2PE"
+  },
+  {
+    "abbrevs": ["1Jn", "1János", "1Ján"], 
+    "sortName": "1Jn",
+    "name": "Szent János I. levele",
+    "bname": "1 Jean",
+    "chapters": [10, 29, 24, 21, 21], 
+    "code": "1JN"
+  },
+  {
+    "abbrevs": ["2János", "2Ján", "2Jn"], 
+    "sortName": "2Jn",
+    "name": "Szent János II. levele",
+    "bname": "2 Jean",
+    "chapters": [13], 
+    "code": "2JN"
+  },
+  {
+    "abbrevs": ["3Jn", "3János", "3Ján"], 
+    "sortName": "3Jn",
+    "name": "Szent János III. levele",
+    "bname": "3 Jean",
+    "chapters": [15], 
+    "code": "3JN"
+  },
+  {
+    "abbrevs": ["Júd", "Jude", "Jud", "Júdás"], 
+    "sortName": "Júd",
+    "name": "Szent Júdás levele",
+    "bname": "Jude",
+    "chapters": [25], 
+    "code": "JUD"
+  },
+  {
+    "abbrevs": ["Ap", "jelen", "Apokalipszis", "Jel", "Jelenések"], 
+    "sortName": "Jel",
+    "name": "Jelenések könyve",
+    "bname": "Apocalypse",
+    "chapters": [20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 18, 18, 20, 8, 21, 18, 24, 21, 15, 27, 21], 
+    "code": "REV"
+  }
+]

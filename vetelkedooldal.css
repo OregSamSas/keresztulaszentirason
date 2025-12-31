@@ -1,0 +1,327 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #2c3e50;
+    --hover-primary-color: #18222b;
+    --secondary-color: #3498db;
+    --hover-secondary-color: #287bb3;
+    --success-color: #27ae60;
+    --hover-success-color: #1b8447;
+    --background-color: #f0f0f0;
+    --input-color: #ffffff;
+    --section-color: #ffffff;
+    --foreground-color: #f8f8f8;
+    --text-color: #222;
+    --muted-text-color: #666;
+    --border-color: #ddd;
+    --shadow: rgba(0, 0, 0, 0.08);
+}
+
+#logo {
+    font-size: 1.7em;
+    position: relative;
+    text-align: right;
+    margin-left: 20px;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: var(--section-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.1em;
+    color: var(--muted-text-color);
+    font-style: italic;
+}
+
+.verse-display {
+    background-color: var(--foreground-color);
+    border-left: 4px solid var(--primary-color);
+    padding: 25px;
+    margin: 30px 0;
+    border-radius: 5px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+    font-weight: bold;
+}
+
+.verse-display p {
+    font-size: 1.3em;
+    line-height: 1.8;
+    color: var(--primary-color);
+    font-style: italic;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+    padding: 20px;
+    background-color: var(--foreground-color);
+    border-radius: 5px;
+}
+
+.input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-control label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.form-control select,
+.form-control input {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1em;
+    font-family: inherit;
+}
+
+.form-control select:focus,
+.form-control input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: var(--input-color);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 1em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover:not([disabled]) {
+    background-color: var(--hover-primary-color);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover:not([disabled]) {
+    background-color: var(--hover-secondary-color);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover:not([disabled]) {
+    background-color: var(--hover-success-color);
+}
+
+button[disabled] {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+    color: var(--muted-text-color);
+}
+
+#currentPlayer h2 {
+    font-weight: bold;
+    padding: 10px;
+    color: var(--secondary-color);
+    border: 6px solid var(--foreground-color);
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.stats-section, .guess-area {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--foreground-color);
+    border-radius: 5px;
+}
+
+.stats-section, .guess-area h3 {
+    text-align: center;
+}
+
+.stats-section h3, .guess-area h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.stats-grid, .guesses-list {
+    display: flex;
+}
+
+.stats-grid {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.guesses-list {
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+.stat-item, .guesses-list span {
+    background-color: var(--section-color);
+    padding: 15px;
+    border-radius: 4px;
+    min-width: 150px;
+}
+
+.stat-item {
+    flex: 0 1 150px;
+}
+
+.guesses-list span {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+}
+.guesses-list .idle {
+    color: var(--muted-text-color);
+}
+.guesses-list abbr {
+    margin: 5px;
+    font-size: 1.5em;
+    background-color: var(--section-color);
+    border-radius: 4px;
+    display: flex;
+    margin-left: auto;
+    text-decoration: none;
+}
+.guesses-list strong {
+    margin-right: 10px;
+    color: var(--secondary-color);
+}
+
+.stat-item, .btn-primary, .btn-secondary, .btn-success, .guesses-list span { 
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.stat-item:hover, .guesses-list span:hover {
+    box-shadow: 0 4px 4px var(--shadow);
+}
+.stat-label {
+    font-size: 0.9em;
+    color: var(--muted-text-color);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--input-color);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+.dropdown-option {
+    padding: 10px;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-option:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.form-control {
+    position: relative;
+}
+
+#revealedWordsCount {
+    display: flex;
+    align-self: flex-end;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--muted-text-color);
+    text-align: center;
+}
