@@ -1,7 +1,7 @@
 
 # Keresztül a Szentíráson
 
-A Hungarian Bible Verse guessing quizgame web applications published under https://oregsamsas.github.io/keresztulaszentirason.
+A Hungarian Bible Verse Guessing Quizgame web application published under https://oregsamsas.github.io/keresztulaszentirason.
 
 The Bible books in the book dropdown are from the catholic scriptures, although when a protestant translation is used (as by default for example), verses won't be generated from there.
 
