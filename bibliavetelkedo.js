@@ -373,6 +373,7 @@ function refreshbookdropdown(bookinput=document.getElementById("bookInput")) {
 function refreshchapterorversedropdown(numberinpid='chapterInput', bookinputid='bookInput', versemode=false, chapterid='chapterInput') {
     let numberOptions = [];
     let booknum = getbooknumforentry(document.getElementById(bookinputid).value);
+    if (booknum === -1) return;
     let maxNumber = BIBLE[booknum].chapters.length;
     let forchapter = 0
     if (versemode) {
