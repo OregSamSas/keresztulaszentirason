@@ -67,6 +67,13 @@ var GUESSES = [];
 const DEBUGMODE = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('debug'))) ? true : false;
 if (DEBUGMODE) console.log("DEBUG MODE ON");
 
+/**
+ * Applies dark mode styling to the page if the user prefers dark color scheme or if forced.
+ * 
+ * @function applyDarkModeIfPreferred
+ * @param {boolean} [force=false] - If true, force dark mode on; if false, use system preference
+ * @returns {void}
+ */
 function applyDarkModeIfPreferred(force=false) {
     // Detect if user prefers dark color scheme
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches || force === true) {
@@ -100,6 +107,12 @@ if (['false', '0', 'no'].includes(DarkMode)) DarkMode =  !['false', '0', 'no'].i
 console.log("Dark mode preference:", DarkMode);
 if (DarkMode !== false) applyDarkModeIfPreferred(DarkMode);
 
+/**
+ * Loads Bible book data from JSON file and populates the BIBLE array.
+ * 
+ * @function reconstruct_bible_dict
+ * @returns {void}
+ */
 function reconstruct_bible_dict() {    
     req = new XMLHttpRequest();
     req.open("GET", "bible_booklengths.json", false);
@@ -108,15 +121,17 @@ function reconstruct_bible_dict() {
     if (DEBUGMODE) console.log("Loaded Bible data:", BIBLE);
 }
 
+/**
+ * Gets the appropriate API URL for a Bible verse from szentiras.eu API.
+ * 
+ * @function verse_url
+ * @param {number} [bnum=0] - Book number (0-based index in BIBLE array)
+ * @param {number} [chapter=1] - Chapter number
+ * @param {number} [verse=1] - Verse number
+ * @param {string} [translation="SZIT"] - Translation code (e.g., "SZIT"), or "all" for all translations
+ * @returns {string} URL to fetch the verse data
+ */
 function verse_url(bnum=0, chapter=1, verse=1, translation="SZIT") {
-    /**
-     * Get the appropriate link for a Bible verse from szentiras.eu API
-     * bnum: book number (0-based index in BIBLE array)
-     * chapter: chapter number
-     * verse: verse number
-     * translation: translation code (e.g., "SZIT"), or "all" for retrieving all translations
-     * Returns: URL to fetch the verse data
-     */
     let location = ''
     if (translation === 'all') {
         location = `${BIBLE[bnum].code}_${chapter.toString()}_${verse.toString()}`;
@@ -129,12 +144,15 @@ function verse_url(bnum=0, chapter=1, verse=1, translation="SZIT") {
     return url;
 }
 
+/**
+ * Gets the book number for a given book entry (Book name and default abbrev in parentheses (as in dropdown options), USX code or abbreviation).
+ * 
+ * @function getbooknumforentry
+ * @param {string} entry - USX book name, code or abbreviation (e.g., "Jn", "Ján", "Szent János evangéliuma" or "Szent János Evangéliuma (Jn)")
+ * @param {boolean} [forcefulltext=false] - Whether to force full text matching
+ * @returns {number} Book number (0-based index in BIBLE), or -1 if not found
+ */
 function getbooknumforentry(entry, forcefulltext=false) {
-    /**
-     * Get the book number (0-based index in BIBLE) for a given book entry (USX code or abbrev)
-     * entry: USX book code or abbrev (e.g., "Jn" or "Ján")
-     * Returns: book number (0-based index in BIBLE), or -1 if not found
-     */
     let booknum = BIBLE.indexOf(BIBLE.find(b => b.name + ` (${b.sortName})` === entry));
     if (booknum === -1 && !forcefulltext) {
         booknum = BIBLE.indexOf(BIBLE.find(b => b.code === entry));
@@ -151,22 +169,28 @@ function getbooknumforentry(entry, forcefulltext=false) {
     return booknum;
 }
 
+/**
+ * Trims trailing and leading whitespace, and replaces multiple spaces with single space.
+ * 
+ * @function trimtext
+ * @param {string} txt - The text to trim
+ * @returns {string} The trimmed text
+ */
 function trimtext(txt) {
-    /**
-     * Trim trailing, leading whitespace, replace multiple spaces with single space 
-     */
     return txt.replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * Loads a Bible verse from szentiras.eu API.
+ * 
+ * @function load_verse
+ * @param {(string|number)} [book="Jn"] - USX book code, abbreviation, or book number (0-based index)
+ * @param {number} [chapter=3] - Chapter number
+ * @param {number} [verse=16] - Verse number
+ * @param {string} [translation="SZIT"] - Translation code (e.g., "SZIT"), or "all" for all translations
+ * @returns {(string|Object|null)} The verse text, object of translations if "all" was requested, or null if not found
+ */
 function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT") {
-    /**
-     * Load a Bible verse from szentiras.eu API
-     * book: USX book code or abbrev (e.g., "Jn" or "Ján")
-     * chapter: chapter number
-     * verse: verse number
-     * translation: translation code (e.g., "SZIT"), or "all" for retrieving all translations
-     * Returns: The text (or texts array of the different translations if "all" was requested) of the verse, or null if not found (invalid book/chapter/verse or not being able to fetch)
-     */
     // Validate inputs
     let booknum = 0;
     if (typeof book === 'number') {
@@ -204,13 +228,15 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT") {
     }
 }
 
+/**
+ * Checks if a given translation contains the specified book.
+ * 
+ * @function check_translation_availability
+ * @param {number} [booknum=0] - Book number (0-based index in BIBLE array)
+ * @param {string} [translation="SZIT"] - Translation code (e.g., "SZIT") or translation type (e.g., "catholic")
+ * @returns {boolean} True if the translation contains the book, false otherwise
+ */
 function check_translation_availability(booknum=0, translation="SZIT") {
-    /**
-     * Check if a given translation contains the specified book
-     * booknum: book number (0-based index in BIBLE array)
-     * translation: translation code (e.g., "SZIT") or translation type (e.g., "catholic")
-     * Returns: true if the translation contains the book, false otherwise
-     */
     let transType = (TRANSLATIONMISSING.hasOwnProperty(translation)) ? translation : TRANSLATIONS[translation].type; 
     for (let missingBook of TRANSLATIONMISSING[transType]) {
         if (missingBook.includes('-')) {
@@ -231,11 +257,13 @@ function check_translation_availability(booknum=0, translation="SZIT") {
     return true;
 }
 
+/**
+ * Gets a random Bible verse location from the current translation.
+ * 
+ * @function random_verse
+ * @returns {number[]} Array with [booknum, chapter, verse]
+ */
 function random_verse() {
-    /**
-     * Get a random Bible verse location
-     * Returns: An array with booknum (0-based index in BIBLE), chapter, verse
-     */
     let booknum = Math.floor(Math.random() * BIBLE.length);
     while (!check_translation_availability(booknum, DEFAULTTRANS)) {
         booknum = Math.floor(Math.random() * BIBLE.length);
@@ -245,15 +273,16 @@ function random_verse() {
     return [booknum, chapter, verse];
 }
 
-function input_focusout (func=() => {}, container=null) {
-    setTimeout(() => {
-        if (container) {
-            container.style.display = 'none';
-        }
-        func();
-    }, 10);
-}
-
+/**
+ * Adds a dropdown menu with selectable options below an input element.
+ * 
+ * @function add_dropdown_for_input
+ * @param {HTMLElement|null} [inputElement=null] - Input element to attach dropdown to
+ * @param {string[]} [options=[]] - Array of option strings to display
+ * @param {Function} [focusoutfunc=() => {}] - Callback function to execute on focus out
+ * @param {number} [eventstamp=0] - Event timestamp for tracking
+ * @returns {void}
+ */
 function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() => {}, eventstamp=0) {
     if (DEBUGMODE)console.log("Adding dropdown for input:", inputElement, options);
     if (!inputElement) return;
@@ -286,6 +315,13 @@ function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() =
         });
 }
 
+/**
+ * Refreshes the book dropdown suggestions based on current input value.
+ * 
+ * @function refreshbookdropdown
+ * @param {HTMLElement} [bookinput=document.getElementById("bookInput")] - Book input element
+ * @returns {void}
+ */
 function refreshbookdropdown(bookinput=document.getElementById("bookInput")) {
     let bookIdentifs = BIBLE.map(b => [b.code].concat(b.abbrevs).concat([b.name]));
     let bookOptions = BIBLE.map(b => b.name + ` (${b.sortName})`);
@@ -324,6 +360,16 @@ function refreshbookdropdown(bookinput=document.getElementById("bookInput")) {
     });
 }
 
+/**
+ * Refreshes chapter or verse dropdown suggestions based on book and chapter selections.
+ * 
+ * @function refreshchapterorversedropdown
+ * @param {string} [numberinpid='chapterInput'] - ID of the input element for chapter/verse
+ * @param {string} [bookinputid='bookInput'] - ID of the book input element
+ * @param {boolean} [versemode=false] - If true, generates verse numbers; if false, generates chapter numbers
+ * @param {string} [chapterid='chapterInput'] - ID of the chapter input element (used in verse mode)
+ * @returns {void}
+ */
 function refreshchapterorversedropdown(numberinpid='chapterInput', bookinputid='bookInput', versemode=false, chapterid='chapterInput') {
     let numberOptions = [];
     let booknum = getbooknumforentry(document.getElementById(bookinputid).value);
@@ -350,6 +396,14 @@ function refreshchapterorversedropdown(numberinpid='chapterInput', bookinputid='
     });
 }
 
+/**
+ * Displays a bonus badge emoji next to a guess in the guesses list.
+ * 
+ * @function award_guess
+ * @param {number} guessnum - Index of the guess to award
+ * @param {string} type - Badge emoji to display (e.g., '✝️', '📖', '📄')
+ * @returns {void}
+ */
 function award_guess(guessnum, type) {
     try {
         document.querySelector(`#guessesList span:nth-child(${guessnum + 1}) abbr`).textContent += `  ${type}🏆`;
@@ -358,16 +412,53 @@ function award_guess(guessnum, type) {
     }
 }
 
-
+/**
+ * Calculate and award points to players based on the guesses and revealed words
+ * 
+ * - if single player mode:
+ *   - the only player gets base points + per unrevealed word points - per revealed word points
+ *   - checks guesses for testament, book, chapter bonuses and display badges next to the guess
+ *   - all bonuses are awarded to the single player
+ * - if multiplayer mode:
+ *   - the current player gets base points + per unrevealed word points - per revealed word points
+ *   - checks guesses in order (starting from the starting player) for testament, book, chapter bonuses and display badges next to the guess
+ *   - only the first player to guess each bonus correctly gets the bonus
+ * - ensures no player's total points go below zero
+ * @function pointsforplayers
+ * @returns {void}
+ */
 function pointsforplayers() {
     let points = POINTLOGIC.base;
     points += POINTLOGIC.perUnrevealedWord * (GAMESTATE.allwords - GAMESTATE.revealedWords.size);
     points += POINTLOGIC.perRevealedWord * GAMESTATE.revealedWords.size;
     if (NUMOFPLAYERS === 1) {
         // Single player mode: add all bonuses
-        points += POINTLOGIC.testamentBonus;
-        points += POINTLOGIC.bookBonus;
-        points += POINTLOGIC.chapterBonus;
+        let bonusesGiven = {testament: false, book: false, chapter: false};
+        for (let r=0; r < GUESSES.length; r++) {
+            if (!bonusesGiven.testament) {
+                let guessNTbook = check_translation_availability(GUESSES[r][0], 'newtestament');
+                let solNTbook = check_translation_availability(VERSELOC[0], 'newtestament');
+                if (guessNTbook === solNTbook) {
+                    points += POINTLOGIC.testamentBonus;
+                    award_guess(r, '✝️');
+                    bonusesGiven.testament = true;
+                }
+            }
+            if (!bonusesGiven.book) {
+                if (GUESSES[r][0] === VERSELOC[0]) {
+                    points += POINTLOGIC.bookBonus;
+                    award_guess(r, '📖');
+                    bonusesGiven.book = true;
+                }
+            }
+            if (!bonusesGiven.chapter) {
+                if (GUESSES[r][0] === VERSELOC[0] && GUESSES[r][1] === VERSELOC[1]) {
+                    points += POINTLOGIC.chapterBonus;
+                    award_guess(r, '📄');
+                    bonusesGiven.chapter = true;
+                }
+            }
+        }
         STATS.totalpoints += points;
     } else {
         // Multiplayer mode
@@ -417,10 +508,16 @@ function pointsforplayers() {
     }
 }
 
+/**
+ * Handles the guessing logic for the Bible verse guessing game.
+ * 
+ * Validates the guess, displays result indicators, records the guess, updates statistics,
+ * and advances to the next player in multiplayer mode or reveals words in autoreveal mode.
+ * 
+ * @function checkGuess
+ * @returns {void}
+ */
 function checkGuess() {
-    /**
-     * Handle the guessing logic for the Bible verse guessing game
-     */
     let bookinput = document.getElementById("bookInput");
     let chapterinput = document.getElementById("chapterInput");
     let verseinput = document.getElementById("verseInput");
@@ -474,8 +571,13 @@ function checkGuess() {
         GAMESTATE.guessed = true;
         
         resultSpan.textContent = '🎉';
+        // The black doesn't look good on success color background
+        guessSpan.style.color = '#f2f2f2';
         guessSpan.style.backgroundColor = 'var(--success-color)';
-        playerNote.style.color = 'white';
+        if (NUMOFPLAYERS > 1) {
+            // The primary color don't contrast well with the success color background
+            playerNote.style.color = 'white';
+        }
         resultSpan.title = "Helyes találat!";
         console.log("Correct guess:", guessedloc);
 
@@ -539,22 +641,13 @@ function checkGuess() {
 }
 
 /**
- * Updates input fields with the current verse location and sets up event listeners
- * for the book input field to provide autocomplete suggestions.
+ * Updates input fields with the current verse location and sets up event listeners for autocomplete suggestions.
+ * 
+ * Attaches focus and input listeners to book, chapter, and verse fields that generate ranked dropdown suggestions
+ * based on matching priority (exact match, starts with, contains).
  * 
  * @function update_inputs
- * @description
- * - Retrieves references to book, chapter, and verse input elements from the DOM
- * - Attaches a 'focus' event listener to the book input that:
- *   - Generates a list of book options from the BIBLE data structure
- *   - Ranks book options based on matches with the current input value
- *     (includes/contains, starts with, and exact matches receive different scores)
- *   - Sorts options by relevance rank in descending order
- *   - Displays matching book suggestions via a dropdown
- * - Sets the selected book number based on the current book input value
- * 
  * @returns {void}
- * 
  */
 function update_inputs() {
     bookinput = document.getElementById("bookInput");
@@ -583,10 +676,17 @@ function update_inputs() {
     selectedBookNum = getbooknumforentry(bookinput.value);
 }
 
+/**
+ * Updates the statistics display on the page based on current game state.
+ * 
+ * In single player mode, displays total rounds, guesses, and points. In multiplayer mode,
+ * displays individual player statistics for wins, guesses, and points.
+ * In multiplayer mode, also updates the current player display.
+ * 
+ * @function update_stats_display
+ * @returns {void}
+ */
 function update_stats_display() {
-    /**
-     * Update the statistics display on the page
-     */
     // Update statistics display
     if (NUMOFPLAYERS === 1) {
         document.getElementById("gamesCount").innerText = GAMESTATE.playedrounds.toString();
@@ -608,29 +708,41 @@ function update_stats_display() {
     let playerDisplay = document.getElementById('currentPlayer');
     playerDisplay.firstElementChild.textContent = `Játékos ${GAMESTATE.currentPlayer + 1}`;
 }
+/**
+ * Converts a Set to a string with a given delimiter.
+ * 
+ * @function set_to_string
+ * @param {Set} set - The Set to convert
+ * @param {string} [delim=''] - String to separate the elements
+ * @param {boolean} [delimfirst=false] - Whether to prepend a delimiter
+ * @param {boolean} [delimend=true] - Whether to append a delimiter
+ * @returns {string} String representation of the Set
+ */
 function set_to_string(set, delim='', delimfirst=false, delimend=true) {
-    /**
-     * Simple utility to convert a Set to a string with a given delimiter
-     * delimiter: string to separate the elements
-     * Returns: string representation of the Set
-     */
     return (delimfirst ? delim : '') + Array.from(set).join(delim) + (delimend ? delim : '');
 }
 
+/**
+ * Masks the verse text by replacing unrevealed words with underscores.
+ * 
+ * Preserves punctuation marks and supports negative indexing for word positions.
+ * 
+ * @function masktext
+ * @param {string} [text=""] - The verse text to mask
+ * @param {Set} [revealedwords=new Set()] - Set of word indices to reveal (supports negative indexing)
+ * @returns {string} The masked text with unrevealed words replaced by underscores
+ */
 function masktext(text="", revealedwords=new Set()) {
-    /**
-     * Mask the verse text by replacing unrevealed words with underscores
-     */
     let words = text.split(' ');
     let punctuations = new Set(['.', ',', ';', ':', '!', '?', '(', ')', '[', ']', '{', '}', '"', "'", '„', '″', '“', '”', '‟']);
     let pstring = set_to_string(punctuations, '\\', true, false);
 
     // Clean revealedwords set and convert from -index notation
-    // revealedwords.forEach(revindex => {
-    //     if (revindex >= words.length) {
-    //         revealedwords.delete(revindex);
-    //     }
-    // })
+    revealedwords.forEach(revindex => {
+        if (revindex >= words.length) {
+            revealedwords.delete(revindex);
+        }
+    });
     revealedwords = new Set([...revealedwords].map(index => index < 0 ? words.length + index : index));
     console.log("Revealed words after cleaning:", revealedwords);
 
@@ -641,14 +753,20 @@ function masktext(text="", revealedwords=new Set()) {
     return maskedWords.join(' ');
 }
 
+/**
+ * Updates the full page with the current verse text, revealed word count, and input/stats information.
+ * 
+ * Displays masked or full verse text based on game state, updates revealed word counter,
+ * and refreshes input fields and statistics display.
+ * 
+ * @function update_page
+ * @returns {void}
+ */
 function update_page() {
-    /**
-     * Update the full page with the current verse text and other info
-     */
     // Update verse text display
     GAMESTATE.allwords = VERSETEXT.split(' ').length;
     if (GAMESTATE.guessed) {
-        document.getElementById("verseText").innerText = VERSETEXT;
+        document.getElementById("verseText").innerText = VERSETEXT + ` – ${BIBLE[VERSELOC[0]].sortName} ${VERSELOC[1]},${VERSELOC[2]}`;
     } else {
         document.getElementById("verseText").innerText = masktext(VERSETEXT, GAMESTATE.revealedWords);
     }
@@ -661,10 +779,16 @@ function update_page() {
     update_stats_display();
 }
 
+/**
+ * Reveals a random unrevealed word in the current verse text.
+ * 
+ * Disables the reveal button when all words have been revealed or the verse is guessed.
+ * 
+ * @function revealWord
+ * @param {HTMLElement|null} [revbtn=null] - The reveal button element to disable when done
+ * @returns {void}
+ */
 function revealWord(revbtn=null) {
-    /**
-     * Reveal a random unrevealed word in the current verse text
-     */
     if (GAMESTATE.revealedWords.size >= GAMESTATE.allwords || GAMESTATE.guessed) {
         revbtn.setAttribute('disabled', '');
         return; // All words already revealed
@@ -681,10 +805,15 @@ function revealWord(revbtn=null) {
     }
 }
 
+/**
+ * Loads and displays the next Bible verse, resets game state and input fields.
+ * 
+ * Clears guesses, resets input fields and buttons, clears the guesses list, and calls new_verse_on_page().
+ * 
+ * @function nextVerse
+ * @returns {void}
+ */
 function nextVerse() {
-    /**
-     * Load and display the next Bible verse, reset game state
-     */
     GUESSES = NUMOFPLAYERS > 1 ? Array.from({length: NUMOFPLAYERS}, () => []) : [];
     // Reset input fields and enable them
     let bookinput = document.getElementById("bookInput");
@@ -703,10 +832,16 @@ function nextVerse() {
     console.log(GAMESTATE)
 }
 
+/**
+ * Loads and displays a new random Bible verse on the page for a new round.
+ * 
+ * Increments played rounds counter, selects a random verse, loads its text, sets up the starting player,
+ * and automatically reveals first and last words in autoreveal mode.
+ * 
+ * @function new_verse_on_page
+ * @returns {void}
+ */
 function new_verse_on_page() {
-    /**
-     * Load and display a new random Bible verse on the page
-     */
     let newplayedrounds = GAMESTATE.playedrounds + 1;
     GAMESTATE = {
         playedrounds: newplayedrounds,
@@ -726,10 +861,16 @@ function new_verse_on_page() {
     update_page();
 }
 
+/**
+ * Sets up multiplayer game mode with individual player statistics display.
+ * 
+ * Creates player stat cards in the DOM, initializes player-specific tracking in STATS object,
+ * and sets up the current player display.
+ * 
+ * @function multiplayer_setup
+ * @returns {void}
+ */
 function multiplayer_setup() {
-    /**
-     * Setup multiplayer statistics tracking
-     */
     let playerDisplay = document.getElementById('currentPlayer');
     playerDisplay.style.display = 'block';
     playerDisplay.firstElementChild.textContent = `Játékos 1`;
@@ -782,10 +923,15 @@ function multiplayer_setup() {
     }
 }
 
+/**
+ * Starts a new Bible verse guessing game.
+ * 
+ * Initializes multiplayer setup if needed and loads the first verse.
+ * 
+ * @function start_new_game
+ * @returns {void}
+ */
 function start_new_game() {
-    /**
-     * Start a new Bible verse guessing game
-     */
     if (NUMOFPLAYERS > 1) {
         multiplayer_setup();
     }
