@@ -21,7 +21,7 @@ You guess a word, which will appear in a list under the input field. On the righ
 
 ## Customisation
 
-Can be customised with URL parameters.
+Can be customised via URL parameters.
 
 * `version` [*str*]: the bible translation used for target verse text and location (if not specified, default version is RÚF 2014)
 * `players` [*int*]: to access multiplayer mode, insert this parameter into the URL, and specify the number of players
