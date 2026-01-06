@@ -280,10 +280,9 @@ function random_verse() {
  * @param {HTMLElement|null} [inputElement=null] - Input element to attach dropdown to
  * @param {string[]} [options=[]] - Array of option strings to display
  * @param {Function} [focusoutfunc=() => {}] - Callback function to execute on focus out
- * @param {number} [eventstamp=0] - Event timestamp for tracking
  * @returns {void}
  */
-function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() => {}, eventstamp=0) {
+function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() => {}) {
     if (!inputElement) return;
     if (inputElement.nextSibling && inputElement.nextSibling.className === 'dropdown-options') {
         inputElement.nextSibling.remove();
@@ -656,7 +655,7 @@ function setup_input_listeners() {
 
     chapterinput.addEventListener('focus', () => {
         setTimeout(() => {
-            refreshchapterorversedropdown('chapterInput', 'bookInput', 0);
+            refreshchapterorversedropdown('chapterInput', 'bookInput', false);
         }, 10);
     });
 
