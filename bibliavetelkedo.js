@@ -280,11 +280,9 @@ function random_verse() {
  * @param {HTMLElement|null} [inputElement=null] - Input element to attach dropdown to
  * @param {string[]} [options=[]] - Array of option strings to display
  * @param {Function} [focusoutfunc=() => {}] - Callback function to execute on focus out
- * @param {number} [eventstamp=0] - Event timestamp for tracking
  * @returns {void}
  */
-function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() => {}, eventstamp=0) {
-    if (DEBUGMODE)console.log("Adding dropdown for input:", inputElement, options);
+function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() => {}) {
     if (!inputElement) return;
     if (inputElement.nextSibling && inputElement.nextSibling.className === 'dropdown-options') {
         inputElement.nextSibling.remove();
@@ -310,7 +308,6 @@ function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() =
             setTimeout(() => {
                 container.style.display = 'none';
                 focusoutfunc();
-                inputElement.dataset.eventstamp = (parseInt(inputElement.dataset.eventstamp) + 1).toString();
             }, 10);
         });
 }
@@ -642,6 +639,32 @@ function checkGuess() {
 }
 
 /**
+ * Sets up event listeners for input autocomplete functionality.
+ * Should be called once during initialization.
+ * 
+ * @function setup_input_listeners
+ * @returns {void}
+ */
+function setup_input_listeners() {
+    const bookinput = document.getElementById("bookInput");
+    const chapterinput = document.getElementById("chapterInput");
+    const verseinput = document.getElementById("verseInput");
+
+    bookinput.addEventListener('focus', () => setTimeout(() => refreshbookdropdown(bookinput), 10));
+    bookinput.addEventListener('input', () => setTimeout(() => refreshbookdropdown(bookinput), 10));
+
+    chapterinput.addEventListener('focus', () => {
+        setTimeout(() => {
+            refreshchapterorversedropdown('chapterInput', 'bookInput', false);
+        }, 10);
+    });
+
+    verseinput.addEventListener('focus', () => {
+        setTimeout(() => refreshchapterorversedropdown('verseInput', 'bookInput', true), 10);
+    });
+}
+
+/**
  * Updates input fields with the current verse location and sets up event listeners for autocomplete suggestions.
  * 
  * Attaches focus and input listeners to book, chapter, and verse fields that generate ranked dropdown suggestions
@@ -655,25 +678,6 @@ function update_inputs() {
     chapterinput = document.getElementById("chapterInput");
     verseinput = document.getElementById("verseInput");
 
-    if (!bookinput.dataset.listenersAdded) {
-        bookinput.addEventListener('focus', () => setTimeout(() => refreshbookdropdown(bookinput), 10));
-        bookinput.addEventListener('input', () => setTimeout(() => refreshbookdropdown(bookinput), 10));
-        bookinput.dataset.listenersAdded = 'true';
-    }
-    if (!chapterinput.dataset.listenersAdded) {
-        chapterinput.addEventListener('focus', () => {
-            setTimeout(() => {
-                refreshchapterorversedropdown('chapterInput', 'bookInput', 0);
-            }, 10);
-        });
-        chapterinput.dataset.listenersAdded = 'true';
-    }
-    if (!verseinput.dataset.listenersAdded) {
-        verseinput.addEventListener('focus', () => {
-            setTimeout(() => refreshchapterorversedropdown('verseInput', 'bookInput', true), 10);
-        });
-        verseinput.dataset.listenersAdded = 'true';
-    }
     selectedBookNum = getbooknumforentry(bookinput.value);
 }
 
@@ -745,7 +749,7 @@ function masktext(text="", revealedwords=new Set()) {
         }
     });
     revealedwords = new Set([...revealedwords].map(index => index < 0 ? words.length + index : index));
-    console.log("Revealed words after cleaning:", revealedwords);
+    if (DEBUGMODE) console.log("Revealed words after cleaning:", revealedwords);
 
     // If not in revealedwords, replace all non-punctuation characters with underscores
     let maskedWords = words.map((word, index) => {
@@ -942,5 +946,6 @@ function start_new_game() {
 window.onload = function() {
     loadPointLogicFromURL();
     reconstruct_bible_dict();
+    setup_input_listeners();
     start_new_game();
 }
