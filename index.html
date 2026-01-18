@@ -24,7 +24,7 @@
         </div>
 
         <div id="currentPlayer" style="display: none">
-            <h2>Játékos 1</h2>
+            <h2><span>Játékos 1</span><button id="skipBtn" class="btn-primary" onclick="checkGuess('skip')">Átugrás</button></h2>   
         </div>
 
         <div class="input-section">
@@ -46,7 +46,7 @@
             <div class="button-group">
                 <button id="guessButton" class="btn-primary" onclick="checkGuess()">Tippelés</button>
                 <button id="revealButton" class="btn-secondary" onclick="revealWord(this)">Új szó felfedése</button>
-                <button id="nextVerseButton" class="btn-success" onclick="nextVerse()">Következő vers</button>
+                <button id="nextVerseButton" class="btn-success" onclick="nextVersePopup()">Következő vers</button>
             </div>
         </div>
 

@@ -90,6 +90,7 @@ body {
     font-style: italic;
     text-align: center;
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .input-section {
@@ -156,6 +157,11 @@ button {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
+#skipBtn {
+    margin-left: 10px;
+    padding: 8px 10px;
+    font-size: x-small;
+}
 
 .btn-primary {
     background-color: var(--primary-color);
@@ -198,6 +204,8 @@ button[disabled] {
     border-radius: 10px;
     text-align: center;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .stats-section, .guess-area {
@@ -259,11 +267,20 @@ button[disabled] {
 .guesses-list abbr {
     margin: 5px;
     font-size: 1.5em;
-    background-color: var(--section-color);
     border-radius: 4px;
     display: flex;
     margin-left: auto;
     text-decoration: none;
+}
+.verse-lookup {
+    margin-left: 3px !important;
+}
+.verse-lookup:not(.not-found) {
+    cursor: pointer;
+}
+.guess-result, .guess-medals {
+    background-color: var(--section-color);
+    margin-left: auto;
 }
 .guesses-list strong {
     margin-right: 10px;
@@ -327,4 +344,38 @@ button[disabled] {
     font-size: 0.9em;
     color: var(--muted-text-color);
     text-align: center;
+}
+.okbutton, .nobutton {
+    margin: 0px 8px;
+    padding: 8px 16px;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.box {
+    background: var(--section-color);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    font-size: larger;
+    font-weight: bold;
+}
+.box p {
+    font-weight: normal;
+    padding-top: 10px;
+    font-size: medium;
+    color: var(--text-color);
+    margin: 0 0 20px 0;
+    white-space: pre-wrap;
 }

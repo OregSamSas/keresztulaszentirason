@@ -153,15 +153,18 @@ function verse_url(bnum=0, chapter=1, verse=1, translation="SZIT") {
  * @returns {number} Book number (0-based index in BIBLE), or -1 if not found
  */
 function getbooknumforentry(entry, forcefulltext=false) {
-    let booknum = BIBLE.indexOf(BIBLE.find(b => b.name + ` (${b.sortName})` === entry));
-    if (booknum === -1 && !forcefulltext) {
-        booknum = BIBLE.indexOf(BIBLE.find(b => b.code === entry));
-        if (booknum === -1) {
-            booknum = BIBLE.indexOf(BIBLE.find(b => b.abbrevs && b.abbrevs.includes(entry)));
+    let booknum = BIBLE.indexOf(BIBLE.find(b => `${b.name} (${get_abbr(BIBLE.indexOf(b))})` === entry));
+    if (booknum === -1) {
+        booknum = BIBLE.indexOf(BIBLE.find(b => get_alt_name(b.name) + ` (${get_abbr(BIBLE.indexOf(b))})` === entry));
+        if (booknum === -1 && !forcefulltext) {
+            booknum = BIBLE.indexOf(BIBLE.find(b => b.code === entry));
             if (booknum === -1) {
-                booknum = BIBLE.indexOf(BIBLE.find(b => b.name === entry));
+                booknum = BIBLE.indexOf(BIBLE.find(b => b.abbrevs && b.abbrevs.includes(entry)));
                 if (booknum === -1) {
-                    booknum = BIBLE.indexOf(BIBLE.find(b => b.sortName === entry));
+                    booknum = BIBLE.indexOf(BIBLE.find(b => b.name === entry));
+                    if (booknum === -1) {
+                        booknum = BIBLE.indexOf(BIBLE.find(b => b.sortName === entry));
+                    }
                 }
             }
         }
@@ -210,17 +213,27 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT") {
     req.send(null);
     if (req.status === 200) {
         let response = JSON.parse(req.responseText);
+        let text = "";
         if (translation === "all") {
             let texts = {};
             for (let t in response.valasz.versek) {
-                let text = trimtext(response.valasz.versek[t].szoveg);
+                text = response.valasz.versek[t].szoveg.trim().replace('  ', '\n'); // Replace double spaces with newlines;
                 let transCode = response.valasz.versek[t].forditas.szov;
                 texts[t] = {text: text, translation: transCode};
             }
             return texts;
         } else {
-            if (DEBUGMODE) console.log(`Verse loaded: ${response['canonicalUrl']}`)
-            return trimtext(response.text);
+            text = response['text'];
+            if (DEBUGMODE) console.log(`Verse (${response['canonicalUrl']}) loaded, raw text: "${text}"`);
+            titlesintext = text.match(/^ +?[A-ZÖÜÓŐÚŰÁÉÍ0-9].*?  ( +?[A-ZÖÜÓŐÚŰÁÉÍ0-9].*?  )*/gm);
+            if (titlesintext) {
+                titlesintext = titlesintext[0].split('   ')
+                for (let titleidx = 0; titleidx < titlesintext.length; titleidx++) {
+                    // Wrap all titles in {{}} and add a newline after
+                    text = text.replace(titlesintext[titleidx], `{{${titlesintext[titleidx].trim()}}}\n`); 
+                }
+            }
+            return text;
         }
     } else {
         console.log(`Error fetching verse (${url}): ${req.status}`);
@@ -280,6 +293,7 @@ function random_verse() {
  * @param {HTMLElement|null} [inputElement=null] - Input element to attach dropdown to
  * @param {string[]} [options=[]] - Array of option strings to display
  * @param {Function} [focusoutfunc=() => {}] - Callback function to execute on focus out
+ * @param {number} [eventstamp=0] - Event timestamp for tracking
  * @returns {void}
  */
 function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() => {}) {
@@ -312,6 +326,47 @@ function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() =
         });
 }
 
+/** Gets the appropriate abbreviation for a book based on the translation type (catholic/protestant).
+ * 
+ * @function get_abbr
+ * @param {(string|number)} book - Book name, code, abbreviation, or book number (0-based index)
+ * @param {string} [translation=DEFAULTTRANS] - Translation code (e.g., "SZIT")
+ * @returns {string|null} Abbreviation of the book, or null if not found
+ **/
+function get_abbr(book, translation=DEFAULTTRANS) {
+    let booknum = typeof(book) === "number" ? book : getbooknumforentry(book);
+    if (booknum === -1) return null;
+    let abbr = "";
+    if (TRANSLATIONS.hasOwnProperty(translation)) {
+        let transType = TRANSLATIONS[translation].type;
+        if (transType === 'protestant') {
+            // Protestant Bible: use first abbrev if available
+            abbr = BIBLE[booknum].abbrevs ? BIBLE[booknum].abbrevs[0] : BIBLE[booknum].sortName;
+        } else if (transType === 'catholic' || transType === 'newtestament') {
+            // Catholic Bible: use default sortName
+            abbr = BIBLE[booknum].sortName;
+        }
+    }
+    return abbr;
+}
+
+/**
+ * Gets the alternative name of a book stored in parentheses, if available.
+ * 
+ * @function get_alt_name
+ * @param {string} bookname - The original book name
+ * @returns {string} The alternative name if available, otherwise the original name
+ */
+function get_alt_name(bookname) {
+    // Returns the alternative name stored in parentheses of a book if available, otherwise returns the original name
+    if (!bookname.includes('(')) return bookname;
+    let returnname = bookname.match(/\((.+)\)/)[1];
+    if (bookname.includes('könyve') && !returnname.includes('könyve')) {
+        returnname += ' könyve';
+    }
+    return returnname;
+}
+
 /**
  * Refreshes the book dropdown suggestions based on current input value.
  * 
@@ -320,8 +375,15 @@ function add_dropdown_for_input(inputElement=null, options=[], focusoutfunc=() =
  * @returns {void}
  */
 function refreshbookdropdown(bookinput=document.getElementById("bookInput")) {
-    let bookIdentifs = BIBLE.map(b => [b.code].concat(b.abbrevs).concat([b.name]));
-    let bookOptions = BIBLE.map(b => b.name + ` (${b.sortName})`);
+    let filteredBible = BIBLE.filter(b => check_translation_availability(BIBLE.indexOf(b), DEFAULTTRANS));
+    let bookIdentifs = filteredBible.map(b => [b.code].concat(b.abbrevs).concat([b.name]));
+    let bookOptions = filteredBible.map(b => {
+        let bookname = b.name;
+        if (get_abbr(BIBLE.indexOf(b)) !== b.sortName) {
+            bookname = get_alt_name(bookname);
+        }
+        return bookname + ` (${get_abbr(BIBLE.indexOf(b))})`;
+    });
     let optionRanks = new Array(bookOptions.length).fill(0);
     let inputVal = bookinput.value.trim().toUpperCase();
     for (let book = 0; book < bookIdentifs.length; book++) {
@@ -404,7 +466,7 @@ function refreshchapterorversedropdown(numberinpid='chapterInput', bookinputid='
  */
 function award_guess(guessnum, type) {
     try {
-        document.querySelector(`#guessesList span:nth-child(${guessnum + 1}) abbr`).textContent += `  ${type}🏆`;
+        document.querySelector(`#guessesList span:nth-child(${guessnum + 1}) .guess-medals`).textContent += `  ${type}🏆`;
     } catch (e) {
         if (DEBUGMODE) console.error("Error updating testament bonus display:", e);
     }
@@ -467,6 +529,7 @@ function pointsforplayers() {
         if (DEBUGMODE) console.log("Calculating points for players, max rounds:", maxrounds, GUESSES);
         if (DEBUGMODE) console.log("Started round: player", GAMESTATE.starterplayer + 1);
         let p = 0;
+        let skipped = 0;
         for (let r = 0; r < maxrounds; r++) {
             for (let p0 = 0; p0 < NUMOFPLAYERS; p0++) {
                 p = (GAMESTATE.starterplayer + p0) % NUMOFPLAYERS;
@@ -495,6 +558,8 @@ function pointsforplayers() {
                             bonusesGiven.chapter = true;
                         }
                     }
+                } else {
+                    skipped++;
                 }
             }
         }
@@ -507,6 +572,64 @@ function pointsforplayers() {
 }
 
 /**
+ * Displays an alert popup with a message and optional title and buttons.
+ *
+ * @param {string} message - The message to display in the popup
+ * @param {string} [title="Figyelem!"] - The title of the popup
+ * @param {string} [okbuttontext="Rendben"] - Text for the OK button
+ * @param {string|null} [nobuttontext=null] - Text for the Cancel button (if null, no Cancel button is shown)
+ * @param {Function|null} [okfunc=null] - Callback function to execute when OK button is clicked
+ * @returns {void}
+ */
+
+function alertPopup(message, title="Figyelem!", okbuttontext="Rendben", nobuttontext=null, okfunc=null) {
+    const existingPopup = document.getElementById('alertPopup');
+    if (existingPopup) existingPopup.remove();
+
+    const popupOverlay = document.createElement('div');
+    popupOverlay.id = 'alertPopup';
+    popupOverlay.className = 'overlay';
+
+    const popupBox = document.createElement('div');
+    popupBox.textContent = title;
+    popupBox.className = 'box';
+
+    const messageText = document.createElement('p');
+    messageText.textContent = message;
+    popupBox.appendChild(messageText);
+
+    const closeButton = document.createElement('button');
+    closeButton.textContent = okbuttontext;
+    if (nobuttontext) {
+        closeButton.className = 'btn-success okbutton';
+    } else {
+        closeButton.className = 'btn-primary okbutton';
+    }
+    closeButton.addEventListener('click', () => {
+        if (okfunc) okfunc();
+        popupOverlay.remove();
+    });
+    popupBox.appendChild(closeButton);
+
+    if (nobuttontext) {
+        const noButton = document.createElement('button');
+        noButton.textContent = nobuttontext;
+        noButton.className = 'btn-secondary nobutton';
+        noButton.addEventListener('click', () => {
+            popupOverlay.remove();
+        });
+        popupBox.appendChild(noButton);
+    }
+
+    popupOverlay.appendChild(popupBox);
+    popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) popupOverlay.remove();
+    });
+
+    document.body.appendChild(popupOverlay);
+}
+
+/**
  * Handles the guessing logic for the Bible verse guessing game.
  * 
  * Validates the guess, displays result indicators, records the guess, updates statistics,
@@ -515,33 +638,77 @@ function pointsforplayers() {
  * @function checkGuess
  * @returns {void}
  */
-function checkGuess() {
+function checkGuess(specialevent=null) {
     let bookinput = document.getElementById("bookInput");
     let chapterinput = document.getElementById("chapterInput");
     let verseinput = document.getElementById("verseInput");
+    let guessedloc = undefined;
 
-    let guessedloc = [
-        getbooknumforentry(bookinput.value),
-        parseInt(chapterinput.value) || 1,
-        parseInt(verseinput.value) || 1
-    ];
-
-    if (guessedloc[0] === -1 ||
-        guessedloc[1] < 1 || guessedloc[1] > BIBLE[guessedloc[0]].chapters.length ||
-        guessedloc[2] < 1 || guessedloc[2] > BIBLE[guessedloc[0]].chapters[guessedloc[1] - 1]) {
-        alert("Érvénytelen könyv, fejezet vagy vers szám!");
-        return;
+    if (specialevent === 'skip') {
+        // Skip turn in multiplayer mode
+        if (NUMOFPLAYERS > 1) {
+            alertPopup(`Játékos ${(GAMESTATE.currentPlayer + 1) % NUMOFPLAYERS + 1} következik!`, "Következő játékos", "Rendben");
+        }
+    } else {
+        guessedloc = [
+            getbooknumforentry(bookinput.value),
+            parseInt(chapterinput.value) || 1,
+            parseInt(verseinput.value) || 1
+        ];
+        // Validate guessed location
+        alerttext = "";
+        if (guessedloc[0] === -1) {
+            alerttext = "Érvénytelen könyv!";
+        } else {
+            if (guessedloc[1] < 1 || guessedloc[1] > BIBLE[guessedloc[0]].chapters.length) {
+                alerttext += " Érvénytelen fejezet!";
+            }
+            if (guessedloc[2] < 1 || guessedloc[2] > BIBLE[guessedloc[0]].chapters[guessedloc[1] - 1]) {
+                alerttext += " Érvénytelen vers!";
+            }
+        }
+        if (alerttext.length > 0) {
+            alertPopup(alerttext.trim(), "Hibás tippelés :(", "Értettem.");
+            return;
+        }
     }
 
     // Create display text for guessed location
-    let guessedBookName = BIBLE[guessedloc[0]].sortName;
-    let guessText = `${guessedBookName} ${guessedloc[1]},${guessedloc[2]}`;
+    let guessedBookName = '';
+    let guessText = '';
+    if (specialevent === 'skip') {
+        guessText = ' Kihagyta a körét';
+    } else {
+        guessedBookName = get_abbr(guessedloc[0]);
+        guessText = `${guessedBookName} ${guessedloc[1]},${guessedloc[2]}`;
+    }
     
     // Create span element
     let guessSpan = document.createElement('span');
     guessSpan.textContent = guessText;
-    let resultSpan = document.createElement('abbr');
-    guessSpan.appendChild(resultSpan);
+    let lookupSpan, medalsSpan, resultSpan, playerNote;
+    if (specialevent !== 'skip') {
+        //      Add verse text lookup as tooltip
+        lookupSpan = document.createElement('abbr');
+        lookupSpan.textContent = ' 🔍';
+        guessSpan.appendChild(lookupSpan);
+        let guessedVerseText = load_verse(guessedloc[0], guessedloc[1], guessedloc[2], DEFAULTTRANS);
+        lookupSpan.className = 'verse-lookup' + (!guessedVerseText ? ' not-found' : '');
+        lookupSpan.title = guessedVerseText ? `„${guessedVerseText.replace('\n', ' ')}”` : "Nem található versszöveg.";
+        lookupSpan.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (guessedVerseText) alertPopup(guessedVerseText, `Vers szövege (${guessText}):`, "Bezár");
+        });
+        //      Add medals span
+        medalsSpan = document.createElement('abbr');
+        medalsSpan.className = 'guess-medals';
+        guessSpan.appendChild(medalsSpan);
+        //      Add clue symbol and tooltip
+        resultSpan = document.createElement('abbr');
+        resultSpan.className = 'guess-result';
+        guessSpan.appendChild(resultSpan);
+    }
+
     
     if (NUMOFPLAYERS > 1) {
         playerNote = document.createElement('strong');
@@ -564,67 +731,69 @@ function checkGuess() {
     document.querySelectorAll('.guesses-list .idle').forEach(el => el.remove());
     guessesList.appendChild(guessSpan);
     
-    // Evaluate guess and add emoji
-    if (guessedloc[0] === VERSELOC[0] && guessedloc[1] === VERSELOC[1] && guessedloc[2] === VERSELOC[2]) {
-        GAMESTATE.guessed = true;
-        
-        resultSpan.textContent = '🎉';
-        // The black doesn't look good on success color background
-        guessSpan.style.color = '#f2f2f2';
-        guessSpan.style.backgroundColor = 'var(--success-color)';
-        if (NUMOFPLAYERS > 1) {
-            // The primary color don't contrast well with the success color background
-            playerNote.style.color = 'white';
-        }
-        resultSpan.title = "Helyes találat!";
-        console.log("Correct guess:", guessedloc);
+    if (specialevent !== 'skip') {
+        // Evaluate guess and add emoji
+        if (guessedloc[0] === VERSELOC[0] && guessedloc[1] === VERSELOC[1] && guessedloc[2] === VERSELOC[2]) {
+            GAMESTATE.guessed = true;
+            
+            resultSpan.textContent = '🎉';
+            // The black doesn't look good on success color background
+            guessSpan.style.color = '#f2f2f2';
+            guessSpan.style.backgroundColor = 'var(--success-color)';
+            if (NUMOFPLAYERS > 1) {
+                // The primary color don't contrast well with the success color background
+                playerNote.style.color = 'white';
+            }
+            resultSpan.title = "Helyes találat!";
+            console.log("Correct guess:", guessedloc);
 
-        // Disable inputs
-        bookinput.disabled = true;
-        chapterinput.disabled = true;
-        verseinput.disabled = true;
-        document.getElementById('guessButton').setAttribute('disabled', '');
+            // Disable inputs
+            bookinput.disabled = true;
+            chapterinput.disabled = true;
+            verseinput.disabled = true;
+            document.getElementById('guessButton').setAttribute('disabled', '');
 
-        // Update statistics
-        if (NUMOFPLAYERS === 1) {
-            STATS.rounds += 1;
+            // Update statistics
+            if (NUMOFPLAYERS === 1) {
+                STATS.rounds += 1;
+            } else {
+                STATS[`player${GAMESTATE.currentPlayer + 1}`].wonrounds += 1;
+            }
+
+            // Evaluate min guesses/revealed stats
+            if (NUMOFPLAYERS === 1) {
+                if (STATS.minRevealed === null || GAMESTATE.revealedWords.size < STATS.minRevealed) {
+                    STATS.minRevealed = GAMESTATE.revealedWords.size;
+                }
+                if (STATS.minGuesses === null || GUESSES.length < STATS.minGuesses) {
+                    STATS.minGuesses = GUESSES.length;
+                }
+            } else {
+                if (DEBUGMODE) console.log("Player", GAMESTATE.currentPlayer + 1, "guesses:", GUESSES[GAMESTATE.currentPlayer].length, "current min guesses:", STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses);
+                if (STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed === null || GAMESTATE.revealedWords.size < STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed) {
+                    STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed = GAMESTATE.revealedWords.size;
+                }
+                if (STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses === null || GUESSES[GAMESTATE.currentPlayer].length < STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses) {
+                    STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses = GUESSES[GAMESTATE.currentPlayer].length;
+                }
+            }
+
+            // Calculate points
+            pointsforplayers();
+
+            revealWord(document.getElementById('revealButton'));
+            update_page();
+        } else if (guessedloc[0] < VERSELOC[0] || 
+                (guessedloc[0] === VERSELOC[0] && guessedloc[1] < VERSELOC[1]) ||
+                (guessedloc[0] === VERSELOC[0] && guessedloc[1] === VERSELOC[1] && guessedloc[2] < VERSELOC[2])) {
+            resultSpan.textContent = '➡️';
+            resultSpan.title = "A keresett vers később található a Szentírásban.";
+            console.log("Guess is earlier:", guessedloc, "Expected:", VERSELOC);
         } else {
-            STATS[`player${GAMESTATE.currentPlayer + 1}`].wonrounds += 1;
+            resultSpan.textContent = '⬅️';
+            resultSpan.title = "A keresett vers korábban található a Szentírásban.";
+            console.log("Guess is later:", guessedloc, "Expected:", VERSELOC);
         }
-
-        // Evaluate min guesses/revealed stats
-        if (NUMOFPLAYERS === 1) {
-            if (STATS.minRevealed === null || GAMESTATE.revealedWords.size < STATS.minRevealed) {
-                STATS.minRevealed = GAMESTATE.revealedWords.size;
-            }
-            if (STATS.minGuesses === null || GUESSES.length < STATS.minGuesses) {
-                STATS.minGuesses = GUESSES.length;
-            }
-        } else {
-            if (DEBUGMODE) console.log("Player", GAMESTATE.currentPlayer + 1, "guesses:", GUESSES[GAMESTATE.currentPlayer].length, "current min guesses:", STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses);
-            if (STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed === null || GAMESTATE.revealedWords.size < STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed) {
-                STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed = GAMESTATE.revealedWords.size;
-            }
-            if (STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses === null || GUESSES[GAMESTATE.currentPlayer].length < STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses) {
-                STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses = GUESSES[GAMESTATE.currentPlayer].length;
-            }
-        }
-
-        // Calculate points
-        pointsforplayers();
-
-        revealWord(document.getElementById('revealButton'));
-        update_page();
-    } else if (guessedloc[0] < VERSELOC[0] || 
-               (guessedloc[0] === VERSELOC[0] && guessedloc[1] < VERSELOC[1]) ||
-               (guessedloc[0] === VERSELOC[0] && guessedloc[1] === VERSELOC[1] && guessedloc[2] < VERSELOC[2])) {
-        resultSpan.textContent = '➡️';
-        resultSpan.title = "A keresett vers később található a Szentírásban.";
-        console.log("Guess is earlier:", guessedloc, "Expected:", VERSELOC);
-    } else {
-        resultSpan.textContent = '⬅️';
-        resultSpan.title = "A keresett vers korábban található a Szentírásban.";
-        console.log("Guess is later:", guessedloc, "Expected:", VERSELOC);
     }
 
     if (NUMOFPLAYERS > 1 && !GAMESTATE.guessed) {
@@ -711,7 +880,7 @@ function update_stats_display() {
     }
     // Also update current player display
     let playerDisplay = document.getElementById('currentPlayer');
-    playerDisplay.firstElementChild.textContent = `Játékos ${GAMESTATE.currentPlayer + 1}`;
+    playerDisplay.firstElementChild.firstElementChild.textContent = `Játékos ${GAMESTATE.currentPlayer + 1}`;
 }
 /**
  * Converts a Set to a string with a given delimiter.
@@ -739,7 +908,7 @@ function set_to_string(set, delim='', delimfirst=false, delimend=true) {
  */
 function masktext(text="", revealedwords=new Set()) {
     let words = text.split(' ');
-    let punctuations = new Set(['.', ',', ';', ':', '!', '?', '(', ')', '[', ']', '{', '}', '"', "'", '„', '″', '“', '”', '‟']);
+    let punctuations = new Set(['\n', '.', ',', ';', ':', '!', '?', '(', ')', '[', ']', '{', '}', '"', "'", '„', '″', '“', '”', '‟']);
     let pstring = set_to_string(punctuations, '\\', true, false);
 
     // Clean revealedwords set and convert from -index notation
@@ -749,7 +918,7 @@ function masktext(text="", revealedwords=new Set()) {
         }
     });
     revealedwords = new Set([...revealedwords].map(index => index < 0 ? words.length + index : index));
-    if (DEBUGMODE) console.log("Revealed words after cleaning:", revealedwords);
+    console.log("Revealed words after cleaning:", revealedwords);
 
     // If not in revealedwords, replace all non-punctuation characters with underscores
     let maskedWords = words.map((word, index) => {
@@ -811,6 +980,22 @@ function revealWord(revbtn=null) {
 }
 
 /**
+ * Prompts the user before proceeding to the next verse if the current verse hasn't been guessed yet.
+ * 
+ * If the verse has been guessed, it directly calls nextVerse(). Otherwise, it shows a confirmation popup.
+ * @function nextVersePopup
+ * @returns {void}
+ */
+function nextVersePopup() {
+    if (GAMESTATE.guessed) nextVerse();
+    else {
+        alertPopup("Még nem találtad ki a verset! Biztosan továbblépsz?", "Figyelem!", "Igen", "Mégse", () => {
+            nextVerse();
+        });
+    }
+}
+
+/**
  * Loads and displays the next Bible verse, resets game state and input fields.
  * 
  * Clears guesses, resets input fields and buttons, clears the guesses list, and calls new_verse_on_page().
@@ -856,7 +1041,7 @@ function new_verse_on_page() {
         allwords: 0,
         guessed: false,
     };
-    VERSELOC = DEBUGMODE ? [16, 1, 1] : random_verse();
+    VERSELOC = DEBUGMODE ? [6, 1, 1] : random_verse();
     VERSETEXT = load_verse(BIBLE[VERSELOC[0]].code, VERSELOC[1], VERSELOC[2], DEFAULTTRANS);
     if (AUTOREVEAL) {
         // Reveal the first and last words automatically
@@ -878,7 +1063,6 @@ function new_verse_on_page() {
 function multiplayer_setup() {
     let playerDisplay = document.getElementById('currentPlayer');
     playerDisplay.style.display = 'block';
-    playerDisplay.firstElementChild.textContent = `Játékos 1`;
 
     STATS = {};
     for (let player = 0; player < NUMOFPLAYERS; player++) {

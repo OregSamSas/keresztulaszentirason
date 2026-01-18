@@ -1,15 +1,15 @@
 
 # Keresztül a Szentíráson
 
-A Hungarian Bible Verse Guessing Quizgame web application published under https://oregsamsas.github.io/keresztulaszentirason.
+A Hungarian Bible Verse Guessing Quizgame web application published under [https://oregsamsas.github.io/keresztulaszentirason](https://oregsamsas.github.io/keresztulaszentirason).
 
 The Bible books in the book dropdown are from the catholic scriptures, although when a protestant translation is used (as by default for example), verses won't be generated from there.
 
-# | ✝️_kereszt________|
+## | ✝️_kereszt________|
 
-# | 🪑_ül______________|
+## | 🪑_ül______________|
 
-# | 📖_a_Szentíráson_|
+## | 📖_a_Szentíráson_|
 
 ## Multiplayer mode
 
@@ -26,7 +26,7 @@ Can be customised via URL parameters.
 * `version` [*str*]: the bible translation used for target verse text and location (if not specified, default version is RÚF 2014)
 * `players` [*int*]: to access multiplayer mode, insert this parameter into the URL, and specify the number of players
 * `autoreveal` [*bool*]: if set true, on game start, the first and last word of the verse will be automatically revealed and a new one after each guess (or player's round if multiplayer)
-* `debug` [*bool*]: parameter to set debug mode on (debug mode will log processes and use the same bible verse (Tobit 1:1) from [plreq.json](plreq.json), in order to spare yourself from fetching verses a hundred times when tested over and over again)
+* `debug` [*bool*]: parameter to set debug mode on (debug mode will log processes and use the same bible verse (Judges 1:1) from [plreq.json](plreq.json), in order to spare yourself from fetching verses a hundred times when tested over and over again)
 * `darkmode` [*bool*]: dark mode preference can be set by URL parameters to override the browser's default (if value is not 0, true, yes or 1, false, no then the parameter will have no effect, default preference will be selected)
 * `pointcalc` [*array*]: list defining the point scoring logic.
   * 1st: base points earned when guessed correctly
@@ -43,3 +43,4 @@ Can be customised via URL parameters.
 * Huge thanks to the developers of szentiras.eu, i.e. the group Szent József Hackathon and furthermore, the Szent Jeremos Bibliatársulat, the maintaner of the website szentiras.hu
 * USX codes for the books of the Bible are collected from [ubsicap's repo](https://github.com/ubsicap/usx/blob/master/schema/usx_2.6.rnc)
 * Chapter and verse counts are collected from the Biblemap object found at [ujevangelizacio.hu](https://halld.ujevangelizacio.hu/biblemap.html)
+* Oh, and GitHub Copilot helped me a lot on the way 😊
