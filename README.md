@@ -3,7 +3,9 @@
 
 A Hungarian Bible Verse Guessing Quizgame web application published under [https://oregsamsas.github.io/keresztulaszentirason](https://oregsamsas.github.io/keresztulaszentirason).
 
-The Bible books in the book dropdown are from the catholic scriptures, although when a protestant translation is used (as by default for example), verses won't be generated from there.
+The core idea of the trivia game is simply to determine the location of a randomly selected secret verse from the Bible, by guessing locations repeatedly and using clues returned for them. The game is for one player by default, but it also offers a more useful and exciting multiplayer mode (see: [#Multiplayer mode](#Multiplayer_mode)).
+
+The Bible book names are originally from the catholic scriptures, but all names and abbreviations are accepted. When a protestant translation is used (as by default for example...), protestant names and abbreviations will be used if available, and verses won't be generated from deuterocanonical scriptures.
 
 ## | ✝️_kereszt________|
 
@@ -13,11 +15,11 @@ The Bible books in the book dropdown are from the catholic scriptures, although 
 
 ## Multiplayer mode
 
-The game offers a multiplayer mode, in which multiple players can compete with each other who guesses the location of the verse at first (see #Customisation to learn how to access it)
+The game offers a multiplayer mode, in which multiple players can compete with each other who guesses the location of the verse at first (see [#Customisation](#Customisation) to learn how to access it)
 
 ## Feedback on guesses and way of scoring points
 
-You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right or to the left. The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can see at the bottom of the page) will be updated at this point.
+You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right (➡️) or to the left (⬅️). The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can view under your guesses, see: (#Statistics)[#Statistics]) will be updated at this point.
 
 ## Statistics
 
