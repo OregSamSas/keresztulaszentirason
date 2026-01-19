@@ -19,7 +19,7 @@ The game offers a multiplayer mode, in which multiple players can compete with e
 
 ## Feedback on guesses and way of scoring points
 
-You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right (➡️) or to the left (⬅️). The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can view under your guesses, see: (#Statistics)[#Statistics]) will be updated at this point.
+You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right (➡️) or to the left (⬅️). The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can view under your guesses, see: [#Statistics](#statistics)) will be updated at this point.
 
 ## Statistics
 
