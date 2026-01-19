@@ -19,7 +19,7 @@ The game offers a multiplayer mode, in which multiple players can compete with e
 
 ## Feedback on guesses and way of scoring points
 
-You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right (➡️) or to the left (⬅️). The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can view under your guesses, see: [#Statistics](#statistics)) will be updated at this point.
+You guess a verse (enter a book and a chapter, verse number is automatically filled by default), which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right (➡️) or to the left (⬅️). The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can view under your guesses, see: [#Statistics](#statistics)) will be updated at this point.
 
 ## Statistics
 
@@ -35,6 +35,7 @@ The game can be customised via [URL parameters](https://en.wikipedia.org/wiki/Qu
 * `players` [*int*]: to access multiplayer mode, insert this parameter into the URL, and specify the number of players
 * `autoreveal` [*bool*]: if set true (as by default!), on game start, the first and last word of the verse will be automatically revealed and a new one after each guess (or player's round if multiplayer), you can disable this automatic behaviour by setting this parameter false
 * `headings` [*bool*]: if set true, titles of chapters, and subchapters will be also displayed as part of the verses in double brackets
+* `guessversenumber` [*bool*]: to disable automatic revealing of correct verse number
 * `debug` [*bool*]: parameter to set debug mode on (debug mode will log processes and use the same bible verse (Judges 1:1) from [plreq.json](plreq.json), in order to spare yourself from fetching verses a hundred times when tested over and over again)
 * `darkmode` [*bool*]: dark mode preference can be set by URL parameters to override the browser's default (if value is not 0, true, yes or 1, false, no then the parameter will have no effect, default preference will be selected)
 * `pointcalc` [*array*]: list defining the point scoring logic.

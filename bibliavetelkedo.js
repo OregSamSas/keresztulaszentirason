@@ -50,6 +50,7 @@ var VERSELOC = [0, 1, 1]; // [booknum, chapter, verse]
 const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players')) || 1;
 const AUTOREVEAL = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('autoreveal'))) ? false : true;
 const HEADINGS = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('headings'))) ? true : false;
+const GUESSVERSENUMBER = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('guessversenumber'))) ? true : false;
 var STATS = {
     rounds: 0,
     totalguesses: 0,
@@ -841,20 +842,20 @@ function setup_input_listeners() {
 }
 
 /**
- * Updates input fields with the current verse location and sets up event listeners for autocomplete suggestions.
- * 
- * Attaches focus and input listeners to book, chapter, and verse fields that generate ranked dropdown suggestions
- * based on matching priority (exact match, starts with, contains).
+ * Updates verse input field based on whether verse number guessing is enabled.
  * 
  * @function update_inputs
  * @returns {void}
  */
 function update_inputs() {
-    bookinput = document.getElementById("bookInput");
-    chapterinput = document.getElementById("chapterInput");
     verseinput = document.getElementById("verseInput");
-
-    selectedBookNum = getbooknumforentry(bookinput.value);
+    if (!GUESSVERSENUMBER) {
+        verseinput.value = VERSELOC[2].toString();
+        verseinput.disabled = true;
+        let label = document.querySelector('label[for="verseInput"]')
+        label.style.color = 'gray';
+        label.textContent = 'Vers (automatikusan kitöltve)';
+    }
 }
 
 /**
