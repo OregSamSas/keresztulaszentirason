@@ -3,7 +3,7 @@
 
 A Hungarian Bible Verse Guessing Quizgame web application published under [https://oregsamsas.github.io/keresztulaszentirason](https://oregsamsas.github.io/keresztulaszentirason).
 
-The core idea of the trivia game is simply to determine the location of a randomly selected secret verse from the Bible, by guessing locations repeatedly and using clues returned for them. The game is for one player by default, but it also offers a more useful and exciting multiplayer mode (see: [#Multiplayer mode](#Multiplayer_mode)).
+The core idea of the trivia game is simply to determine the location of a randomly selected secret verse from the Bible, by guessing locations repeatedly and using clues returned for them. The game is for one player by default, but it also offers a more useful and exciting multiplayer mode (see: [#Multiplayer mode](#multiplayer-mode)).
 
 The Bible book names are originally from the catholic scriptures, but all names and abbreviations are accepted. When a protestant translation is used (as by default for example...), protestant names and abbreviations will be used if available, and verses won't be generated from deuterocanonical scriptures.
 
@@ -15,7 +15,7 @@ The Bible book names are originally from the catholic scriptures, but all names 
 
 ## Multiplayer mode
 
-The game offers a multiplayer mode, in which multiple players can compete with each other who guesses the location of the verse at first (see [#Customisation](#Customisation) to learn how to access it)
+The game offers a multiplayer mode, in which multiple players can compete with each other who guesses the location of the verse at first (see [#Customisation](#customisation) to learn how to access it)
 
 ## Feedback on guesses and way of scoring points
 
