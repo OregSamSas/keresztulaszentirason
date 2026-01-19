@@ -379,3 +379,16 @@ button[disabled] {
     margin: 0 0 20px 0;
     white-space: pre-wrap;
 }
+footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--muted-text-color);
+}
+footer a {
+    color: var(--muted-text-color);
+    text-decoration: none;
+    fill: var(--muted-text-color);
+    display: inline-flex;
+    margin-top: 10px;
+}

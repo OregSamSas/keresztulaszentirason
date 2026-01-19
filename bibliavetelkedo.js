@@ -49,6 +49,7 @@ var VERSETEXT = "";
 var VERSELOC = [0, 1, 1]; // [booknum, chapter, verse]
 const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players')) || 1;
 const AUTOREVEAL = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('autoreveal'))) ? false : true;
+const HEADINGS = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('headings'))) ? true : false;
 var STATS = {
     rounds: 0,
     totalguesses: 0,
@@ -231,8 +232,12 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
             if (titlesintext) {
                 titlesintext = titlesintext[0].split('   ')
                 for (let titleidx = 0; titleidx < titlesintext.length; titleidx++) {
-                    // Wrap all titles in {{}} and add a newline after
-                    text = text.replace(titlesintext[titleidx], `{{${titlesintext[titleidx].trim()}}}\n`); 
+                    // Wrap all titles in {{}} and add a newline after or delete it if headings are disabled
+                    if (HEADINGS) {
+                        text = text.replace(titlesintext[titleidx], `{{${titlesintext[titleidx].trim()}}}\n`); 
+                    } else {
+                        text = text.replace(titlesintext[titleidx], '');
+                    }
                 }
             }
             return text.trim();
