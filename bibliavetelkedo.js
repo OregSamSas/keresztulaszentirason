@@ -367,6 +367,9 @@ function get_abbr(book, translation=DEFAULTTRANS) {
  */
 function get_alt_name(bookname) {
     // Returns the alternative name stored in parentheses of a book if available, otherwise returns the original name
+    if (bookname.includes('Szent ')) {
+        bookname = bookname.replace('Szent ', '');
+    }
     if (!bookname.includes('(')) return bookname;
     let returnname = bookname.match(/\((.+)\)/)[1];
     if (bookname.includes('könyve') && !returnname.includes('könyve')) {
@@ -387,7 +390,7 @@ function refreshbookdropdown(bookinput=document.getElementById("bookInput")) {
     let bookIdentifs = filteredBible.map(b => [b.code].concat(b.abbrevs).concat([b.name]));
     let bookOptions = filteredBible.map(b => {
         let bookname = b.name;
-        if (get_abbr(BIBLE.indexOf(b)) !== b.sortName) {
+        if (TRANSLATIONS[DEFAULTTRANS].type === 'protestant') {
             bookname = get_alt_name(bookname);
         }
         return bookname + ` (${get_abbr(BIBLE.indexOf(b))})`;
