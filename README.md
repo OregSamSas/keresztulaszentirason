@@ -19,13 +19,19 @@ The game offers a multiplayer mode, in which multiple players can compete with e
 
 You guess a word, which will appear in a list under the input field. On the right of each guess you will see an arrow either pointing to the right or to the left. The first tells you that the verse to be guessed is from later in the Bible, the latter will tell you the opposite. If you guess corectly, the game will end, and each player will earn points. Bonus points will be given for the players guessing the Testament (✝️🏆), Book (📖🏆) and chapter (📄🏆) for the first time. Statistics (you can see at the bottom of the page) will be updated at this point.
 
+## Statistics
+
+At the bottom of the page, you can follow your game stats. Won rounds, points earned so far, total number of guesses.
+
+And two, more interesting stats: least guesses used and least word revelation. (Max number of unrevealed words, when correctly guessing.) Sadly, it won't be saved, and it cannot be exported. (You can take a snapshot however of your stats and share it with whom you'd like to.)
+
 ## Customisation
 
 Can be customised via URL parameters.
 
 * `version` [*str*]: the bible translation used for target verse text and location (if not specified, default version is RÚF 2014)
 * `players` [*int*]: to access multiplayer mode, insert this parameter into the URL, and specify the number of players
-* `autoreveal` [*bool*]: if set true, on game start, the first and last word of the verse will be automatically revealed and a new one after each guess (or player's round if multiplayer)
+* `autoreveal` [*bool*]: if set true (as by default!), on game start, the first and last word of the verse will be automatically revealed and a new one after each guess (or player's round if multiplayer), you can disable this automaticbehaviour by setting this parameter false 
 * `debug` [*bool*]: parameter to set debug mode on (debug mode will log processes and use the same bible verse (Judges 1:1) from [plreq.json](plreq.json), in order to spare yourself from fetching verses a hundred times when tested over and over again)
 * `darkmode` [*bool*]: dark mode preference can be set by URL parameters to override the browser's default (if value is not 0, true, yes or 1, false, no then the parameter will have no effect, default preference will be selected)
 * `pointcalc` [*array*]: list defining the point scoring logic.

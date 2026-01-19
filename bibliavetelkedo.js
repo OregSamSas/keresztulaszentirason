@@ -19,6 +19,7 @@ var BIBLE = [
     // Will be pulled from bible_booklengths.json
     // USX codes from https://github.com/ubsicap/usx/blob/master/schema/usx_2.6.rnc 
     // Other data (chapter and verse counts, alternative names  for books) from https://halld.ujevangelizacio.hu/biblemap.html
+    //  ($.xmlToJSON(bibleMap.dataXML))
 ]
 
 const POINTLOGIC = {
@@ -47,13 +48,13 @@ var DEFAULTTRANS = new URLSearchParams(window.location.search).get('version') ||
 var VERSETEXT = "";
 var VERSELOC = [0, 1, 1]; // [booknum, chapter, verse]
 const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players')) || 1;
-const AUTOREVEAL = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('autoreveal'))) ? true : false;
+const AUTOREVEAL = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('autoreveal'))) ? false : true;
 var STATS = {
     rounds: 0,
     totalguesses: 0,
     totalpoints: 0,
     minGuesses: null,
-    minRevealed: null,
+    maxunrevealed: null,
 };
 var GAMESTATE = {
     playedrounds: -1,
@@ -136,7 +137,7 @@ function verse_url(bnum=0, chapter=1, verse=1, translation="SZIT") {
     if (translation === 'all') {
         location = `${BIBLE[bnum].code}_${chapter.toString()}_${verse.toString()}`;
     } else {
-        location = `${BIBLE[bnum].sortName}%20${chapter.toString()},${verse.toString()}`;
+        location = `${get_abbr(bnum)}%20${chapter.toString()},${verse.toString()}`;
     }
     let url = `https://szentiras.eu/api/${translation === "all" ? "forditasok" : "ref"}/${location}`
     url += (translation === "all" ? "" : `/${translation}`);
@@ -169,6 +170,7 @@ function getbooknumforentry(entry, forcefulltext=false) {
             }
         }
     }
+    if (DEBUGMODE) console.log("Book number for entry", entry, "is:", booknum, booknum === -1 ? "NOT FOUND" : BIBLE[booknum].name);
     return booknum;
 }
 
@@ -193,7 +195,7 @@ function trimtext(txt) {
  * @param {string} [translation="SZIT"] - Translation code (e.g., "SZIT"), or "all" for all translations
  * @returns {(string|Object|null)} The verse text, object of translations if "all" was requested, or null if not found
  */
-function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT") {
+function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefetching=false) {
     // Validate inputs
     let booknum = 0;
     if (typeof book === 'number') {
@@ -207,7 +209,7 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT") {
     if (verse < 1 || verse > BIBLE[booknum].chapters[chapter - 1]) return null;
 
     // Fetch verse data
-    let url = (DEBUGMODE) ? 'plreq.json' : verse_url(booknum, chapter, verse, translation);
+    let url = (DEBUGMODE && !forcefetching) ? 'plreq.json' : verse_url(booknum, chapter, verse, translation);
     let req = new XMLHttpRequest();
     req.open("GET", url, false);
     req.send(null);
@@ -233,7 +235,7 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT") {
                     text = text.replace(titlesintext[titleidx], `{{${titlesintext[titleidx].trim()}}}\n`); 
                 }
             }
-            return text;
+            return text.trim();
         }
     } else {
         console.log(`Error fetching verse (${url}): ${req.status}`);
@@ -692,7 +694,7 @@ function checkGuess(specialevent=null) {
         lookupSpan = document.createElement('abbr');
         lookupSpan.textContent = ' 🔍';
         guessSpan.appendChild(lookupSpan);
-        let guessedVerseText = load_verse(guessedloc[0], guessedloc[1], guessedloc[2], DEFAULTTRANS);
+        let guessedVerseText = load_verse(guessedloc[0], guessedloc[1], guessedloc[2], DEFAULTTRANS, true);
         lookupSpan.className = 'verse-lookup' + (!guessedVerseText ? ' not-found' : '');
         lookupSpan.title = guessedVerseText ? `„${guessedVerseText.replace('\n', ' ')}”` : "Nem található versszöveg.";
         lookupSpan.addEventListener('click', (e) => {
@@ -762,16 +764,16 @@ function checkGuess(specialevent=null) {
 
             // Evaluate min guesses/revealed stats
             if (NUMOFPLAYERS === 1) {
-                if (STATS.minRevealed === null || GAMESTATE.revealedWords.size < STATS.minRevealed) {
-                    STATS.minRevealed = GAMESTATE.revealedWords.size;
+                if (STATS.maxunrevealed === null || GAMESTATE.allwords - GAMESTATE.revealedWords.size > STATS.maxunrevealed) {
+                    STATS.maxunrevealed = GAMESTATE.allwords - GAMESTATE.revealedWords.size;
                 }
                 if (STATS.minGuesses === null || GUESSES.length < STATS.minGuesses) {
                     STATS.minGuesses = GUESSES.length;
                 }
             } else {
                 if (DEBUGMODE) console.log("Player", GAMESTATE.currentPlayer + 1, "guesses:", GUESSES[GAMESTATE.currentPlayer].length, "current min guesses:", STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses);
-                if (STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed === null || GAMESTATE.revealedWords.size < STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed) {
-                    STATS[`player${GAMESTATE.currentPlayer + 1}`].minrevealed = GAMESTATE.revealedWords.size;
+                if (STATS[`player${GAMESTATE.currentPlayer + 1}`].maxunrevealed === null || GAMESTATE.allwords - GAMESTATE.revealedWords.size > STATS[`player${GAMESTATE.currentPlayer + 1}`].maxunrevealed) {
+                    STATS[`player${GAMESTATE.currentPlayer + 1}`].maxunrevealed = GAMESTATE.allwords - GAMESTATE.revealedWords.size;
                 }
                 if (STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses === null || GUESSES[GAMESTATE.currentPlayer].length < STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses) {
                     STATS[`player${GAMESTATE.currentPlayer + 1}`].minguesses = GUESSES[GAMESTATE.currentPlayer].length;
@@ -868,14 +870,14 @@ function update_stats_display() {
         document.getElementById("guessesCount").innerText = STATS.totalguesses.toString();
         document.getElementById("pointsCount").innerText = STATS.totalpoints.toString();
         document.getElementById("minguessCount").innerText = STATS.minGuesses !== null ? STATS.minGuesses.toString() : '-';
-        document.getElementById("minrevealedCount").innerText = STATS.minRevealed !== null ? STATS.minRevealed.toString() : '-';
+        document.getElementById("maxunrevealedCount").innerText = STATS.maxunrevealed !== null ? STATS.maxunrevealed.toString() : '-';
     } else {
         for (let player = 0; player < NUMOFPLAYERS; player++) {
             document.getElementById(`player${player + 1}wonroundsCount`).innerText = STATS[`player${player + 1}`].wonrounds.toString();
             document.getElementById(`player${player + 1}totalguessesCount`).innerText = STATS[`player${player + 1}`].totalguesses.toString();
             document.getElementById(`player${player + 1}totalpointsCount`).innerText = STATS[`player${player + 1}`].totalpoints.toString();
             document.getElementById(`player${player + 1}minguessesCount`).innerText = STATS[`player${player + 1}`].minguesses !== null ? STATS[`player${player + 1}`].minguesses.toString() : '-';
-            document.getElementById(`player${player + 1}minrevealedCount`).innerText = STATS[`player${player + 1}`].minrevealed !== null ? STATS[`player${player + 1}`].minrevealed.toString() : '-';
+            document.getElementById(`player${player + 1}maxunrevealedCount`).innerText = STATS[`player${player + 1}`].maxunrevealed !== null ? STATS[`player${player + 1}`].maxunrevealed.toString() : '-';
         }
     }
     // Also update current player display
@@ -907,7 +909,7 @@ function set_to_string(set, delim='', delimfirst=false, delimend=true) {
  * @returns {string} The masked text with unrevealed words replaced by underscores
  */
 function masktext(text="", revealedwords=new Set()) {
-    let words = text.split(' ');
+    let words = text.trim().split(' ');
     let punctuations = new Set(['\n', '.', ',', ';', ':', '!', '?', '(', ')', '[', ']', '{', '}', '"', "'", '„', '″', '“', '”', '‟']);
     let pstring = set_to_string(punctuations, '\\', true, false);
 
@@ -918,7 +920,7 @@ function masktext(text="", revealedwords=new Set()) {
         }
     });
     revealedwords = new Set([...revealedwords].map(index => index < 0 ? words.length + index : index));
-    console.log("Revealed words after cleaning:", revealedwords);
+    if (DEBUGMODE) console.log("Revealed words after cleaning:", revealedwords);
 
     // If not in revealedwords, replace all non-punctuation characters with underscores
     let maskedWords = words.map((word, index) => {
@@ -940,7 +942,7 @@ function update_page() {
     // Update verse text display
     GAMESTATE.allwords = VERSETEXT.split(' ').length;
     if (GAMESTATE.guessed) {
-        document.getElementById("verseText").innerText = VERSETEXT + ` – ${BIBLE[VERSELOC[0]].sortName} ${VERSELOC[1]},${VERSELOC[2]}`;
+        document.getElementById("verseText").innerText = VERSETEXT + ` – ${get_abbr(VERSELOC[0])} ${VERSELOC[1]},${VERSELOC[2]}`;
     } else {
         document.getElementById("verseText").innerText = masktext(VERSETEXT, GAMESTATE.revealedWords);
     }
@@ -1019,7 +1021,7 @@ function nextVerse() {
     document.getElementById('revealButton').removeAttribute('disabled');
     document.querySelector('.guesses-list').innerHTML = '<span class="idle">Nincsenek tippek még.<abbr title="A tippeid eredményei itt fognak megjelenni.">🤷</abbr></span>';
     new_verse_on_page();
-    console.log(GAMESTATE)
+    if (DEBUGMODE) console.log(GAMESTATE);
 }
 
 /**
@@ -1071,7 +1073,7 @@ function multiplayer_setup() {
             totalguesses: 0,
             totalpoints: 0,
             minguesses: null,
-            minrevealed: null,
+            maxunrevealed: null,
         };
     }
 
@@ -1092,7 +1094,7 @@ function multiplayer_setup() {
         playerStatDiv.appendChild(playerTitle);
         let statsList = document.createElement('div');
         statsList.className = 'stats-list';
-        const statNames = ['Nyert játékok száma', 'Összes tipp', 'Összes pont', 'Legkevesebb tippből kitalált', 'Legkevesebb szóból kitalált'];
+        const statNames = ['Nyert játékok száma', 'Összes tipp', 'Összes pont', 'Legkevesebb tippből kitalált', 'Legtöbb felfedetlenből kitalált'];
         statNames.forEach(statName => {
             let statItem = document.createElement('div');
             statItem.className = 'stat-item';
