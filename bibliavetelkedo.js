@@ -50,7 +50,7 @@ var VERSELOC = [0, 1, 1]; // [booknum, chapter, verse]
 const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players')) || 1;
 const AUTOREVEAL = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('autoreveal'))) ? false : true;
 const HEADINGS = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('headings'))) ? true : false;
-const GUESSVERSENUMBER = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('guessversenumber'))) ? true : false;
+const GUESSVERSENUMBER = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('guessversenumber'))) ? false : true;
 var STATS = {
     rounds: 0,
     totalguesses: 0,
