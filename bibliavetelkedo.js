@@ -197,7 +197,7 @@ function trimtext(txt) {
  * @param {string} [translation="SZIT"] - Translation code (e.g., "SZIT"), or "all" for all translations
  * @returns {(string|Object|null)} The verse text, object of translations if "all" was requested, or null if not found
  */
-function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefetching=false) {
+function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefetching=false, crossref='delete') {
     // Validate inputs
     let booknum = 0;
     if (typeof book === 'number') {
@@ -235,7 +235,7 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
         } else {
             text = response['text'];
             if (DEBUGMODE) console.log(`Verse (${response['canonicalUrl']}) loaded, raw text: "${text}"`);
-            titlesintext = text.match(/^ +?[A-ZÖÜÓŐÚŰÁÉÍ0-9].*?  ( +?[A-ZÖÜÓŐÚŰÁÉÍ0-9].*?  )*/gm);
+            let titlesintext = text.match(/^ +?[A-ZÖÜÓŐÚŰÁÉÍ0-9].*?  ( +?[A-ZÖÜÓŐÚŰÁÉÍ0-9].*?  )*/gm);
             if (titlesintext) {
                 titlesintext = titlesintext[0].split('   ')
                 for (let titleidx = 0; titleidx < titlesintext.length; titleidx++) {
@@ -246,6 +246,11 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
                         text = text.replace(titlesintext[titleidx], '');
                     }
                 }
+            }
+            if (crossref !== 'leaveunchanged') {
+                let bookabbrevs = [BIBLE.map(b => get_abbr(BIBLE.indexOf(b)))].join().replace(/,/g, '|');
+                let crossreferences = new RegExp(`\\( *((?:${bookabbrevs})\\b *[0-9\\,\\:\\-]+?) *\\)`, 'gm');
+                text = text.replace(crossreferences, crossref === 'delete' ? '' : `(<a target="_blank" href="https://szentiras.eu/${DEFAULTTRANS}/$1" rel="noopener noreferrer">$1</a>)`);
             }
             return text.trim();
         }
@@ -612,7 +617,7 @@ function alertPopup(message, title="Figyelem!", okbuttontext="Rendben", nobutton
     popupBox.className = 'box';
 
     const messageText = document.createElement('p');
-    messageText.textContent = message;
+    messageText.innerHTML = message;
     popupBox.appendChild(messageText);
 
     const closeButton = document.createElement('button');
@@ -709,7 +714,7 @@ function checkGuess(specialevent=null) {
         lookupSpan = document.createElement('abbr');
         lookupSpan.textContent = ' 🔍';
         guessSpan.appendChild(lookupSpan);
-        let guessedVerseText = load_verse(guessedloc[0], guessedloc[1], guessedloc[2], DEFAULTTRANS, true);
+        let guessedVerseText = load_verse(guessedloc[0], guessedloc[1], guessedloc[2], DEFAULTTRANS, true, 'link');
         lookupSpan.className = 'verse-lookup' + (!guessedVerseText ? ' not-found' : '');
         lookupSpan.title = guessedVerseText ? `„${guessedVerseText.replace('\n', ' ')}”` : "Nem található versszöveg.";
         lookupSpan.addEventListener('click', (e) => {
