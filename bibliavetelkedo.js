@@ -213,8 +213,14 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
     // Fetch verse data
     let url = (DEBUGMODE && !forcefetching) ? 'plreq.json' : verse_url(booknum, chapter, verse, translation);
     let req = new XMLHttpRequest();
-    req.open("GET", url, false);
-    req.send(null);
+    try {
+        req.open("GET", url, false);
+        req.send(null);
+    } catch (e) {
+        console.log(`Error fetching verse (${url}):`, e);
+        alertPopup(`Hiba történt a vers betöltése közben. Kérjük, ellenőrizd internetkapcsolatodat.`, "Váratlan hálózati hiba", "Értettem");
+        return null;
+    }
     if (req.status === 200) {
         let response = JSON.parse(req.responseText);
         let text = "";
