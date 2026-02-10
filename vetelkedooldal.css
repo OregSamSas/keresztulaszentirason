@@ -379,6 +379,13 @@ button[disabled] {
     margin: 0 0 20px 0;
     white-space: pre-wrap;
 }
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
 footer {
     margin-top: 20px;
     text-align: center;
