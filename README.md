@@ -13,6 +13,15 @@ The Bible book names are originally from the catholic scriptures, but all names 
 
 ## | 📖_a_Szentíráson_|
 
+## ⚠️ Important note ⚠️: API keys
+
+The game uses an [external provider (Szentiras.eu)](https://szentiras.eu/api) for accessing the text content of passages from Scripture. As of 01/04/2026, this third party provider needs a correct API key to serve requests, which you have to obtain for yourself in order to use the game. Otherwise, texts won't render. (Neither for the "secret verse" nor for guessed items.) You can ask for such a token by emailing the developers of Szentiras.eu, as it is described in the previously mentioned link. 
+
+* Note: I know it was April Fool's day, but it's still serious. You have to have an API key to make this game function.
+
+Once you have a working API key, you should include it in your URL as a parameter.
+**Example**: if you have an API key: `123ab-456cd-789ef`, then you should type the address `https://oregsamsas.github.io/keresztulaszentirason/?token=123ab-456cd-789ef`
+
 ## Multiplayer mode
 
 The game offers a multiplayer mode, in which multiple players can compete with each other who guesses the location of the verse at first (see [#Customisation](#customisation) to learn how to access it)
@@ -31,7 +40,8 @@ And two, more interesting stats: least guesses used and least word revelation. (
 
 The game can be customised via [URL parameters](https://en.wikipedia.org/wiki/Query_string).
 
-* `version` [*str*]: the bible translation used for target verse text and location (if not specified, default version is RÚF 2014)
+* `token` [*str*]: the personal API key to access Bible passages from the external provider (see: [#API keys](#%EF%B8%8F-important-note-%EF%B8%8F-api-keys))
+* `version` [*str*]: the Bible translation used for target verse text and location (if not specified, default version is RÚF 2014)
 * `players` [*int*]: to access multiplayer mode, insert this parameter into the URL, and specify the number of players
 * `autoreveal` [*bool*]: if set true (as by default!), on game start, the first and last word of the verse will be automatically revealed and a new one after each guess (or player's round if multiplayer), you can disable this automatic behaviour by setting this parameter false
 * `headings` [*bool*]: if set true, titles of chapters, and subchapters will be also displayed as part of the verses in double brackets
