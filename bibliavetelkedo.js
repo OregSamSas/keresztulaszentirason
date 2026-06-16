@@ -230,7 +230,6 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
         return null;
     }
     if (req.status === 200) {
-        console.log(req.getResponseHeader('X-API-Key'))
         let response = JSON.parse(req.responseText);
         let text = "";
         if (translation === "all") {
