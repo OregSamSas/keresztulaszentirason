@@ -47,7 +47,8 @@ function loadPointLogicFromURL() {
 var DEFAULTTRANS = new URLSearchParams(window.location.search).get('version') || "RUF";
 var VERSETEXT = "";
 var VERSELOC = [0, 1, 1]; // [booknum, chapter, verse]
-const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players')) || 1;
+const APITOKEN = new URLSearchParams(window.location.search).get('token');
+const NUMOFPLAYERS = parseInt(new URLSearchParams(window.location.search).get('players') || 1);
 const AUTOREVEAL = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('autoreveal'))) ? false : true;
 const HEADINGS = (['true', '1', 'yes'].includes(new URLSearchParams(window.location.search).get('headings'))) ? true : false;
 const GUESSVERSENUMBER = (['false', '0', 'no'].includes(new URLSearchParams(window.location.search).get('guessversenumber'))) ? false : true;
@@ -211,10 +212,17 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
     if (verse < 1 || verse > BIBLE[booknum].chapters[chapter - 1]) return null;
 
     // Fetch verse data
-    let url = (DEBUGMODE && !forcefetching) ? 'plreq.json' : verse_url(booknum, chapter, verse, translation);
-    let req = new XMLHttpRequest();
+    const url = (DEBUGMODE && !forcefetching) ? 'plreq.json' : verse_url(booknum, chapter, verse, translation);
+    const req = new XMLHttpRequest();
+    const token = APITOKEN ? APITOKEN.toString() : undefined;
+    if (!token) {
+        console.log(`Error fetching verse (${url}): no API token in context.`);
+        alertPopup(`A kiszolgáló eléréséhez szükséges API kulcs nincs megadva az URL-ben, így a szentírás szövege nem érhető el.`, "Hiányzó API-kulcs", "Értettem");
+        return null;
+    }
     try {
         req.open("GET", url, false);
+        req.setRequestHeader('X-API-Key', token)
         req.send(null);
     } catch (e) {
         console.log(`Error fetching verse (${url}):`, e);
@@ -222,6 +230,7 @@ function load_verse(book="Jn", chapter=3, verse=16, translation="SZIT", forcefet
         return null;
     }
     if (req.status === 200) {
+        console.log(req.getResponseHeader('X-API-Key'))
         let response = JSON.parse(req.responseText);
         let text = "";
         if (translation === "all") {
@@ -960,11 +969,13 @@ function masktext(text="", revealedwords=new Set()) {
  */
 function update_page() {
     // Update verse text display
-    GAMESTATE.allwords = VERSETEXT.split(' ').length;
+    if (VERSETEXT) GAMESTATE.allwords = VERSETEXT.split(' ').length;
     if (GAMESTATE.guessed) {
-        document.getElementById("verseText").innerText = VERSETEXT + ` – ${get_abbr(VERSELOC[0])} ${VERSELOC[1]},${VERSELOC[2]}`;
+        document.getElementById('verseText').innerText = VERSETEXT ?? '?' + ` – ${get_abbr(VERSELOC[0])} ${VERSELOC[1]},${VERSELOC[2]}`;
+        document.getElementById('skipBtn').setAttribute('disabled', true);
     } else {
-        document.getElementById("verseText").innerText = masktext(VERSETEXT, GAMESTATE.revealedWords);
+        if (VERSETEXT) document.getElementById('verseText').innerText = masktext(VERSETEXT, GAMESTATE.revealedWords);
+        document.getElementById('skipBtn').removeAttribute('disabled');
     }
 
     // Update revealed words count display under the verse text
